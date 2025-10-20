@@ -9,8 +9,7 @@ public class MoveToWayPoints : MonoBehaviour
 
 
     public float movementSpeed;
-
-    private int currentWayPointID = 0;
+    //private int currentWayPointID = 0; //not used yet and may be never :D
     private int nextWayPointID = 0;
     private Vector3 nextWayPoint;
     private Vector3 currentPosition;
