@@ -911,6 +911,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1385117090
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1385117091}
+  m_Layer: 0
+  m_Name: fields
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1385117091
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1385117090}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1775186778}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1642027345
 GameObject:
   m_ObjectHideFlags: 0
@@ -1087,6 +1118,7 @@ GameObject:
   - component: {fileID: 1775186781}
   - component: {fileID: 1775186780}
   - component: {fileID: 1775186779}
+  - component: {fileID: 1775186782}
   m_Layer: 0
   m_Name: PlayGround
   m_TagString: Untagged
@@ -1106,7 +1138,8 @@ Transform:
   m_LocalPosition: {x: 0, y: -0.9, z: 0}
   m_LocalScale: {x: 13, y: 0.1, z: 13}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1385117091}
   m_Father: {fileID: 193786022}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1775186779
@@ -1186,6 +1219,24 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1775186777}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1775186782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1775186777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba6e99d6631ba7b478d12defae3a009e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NewMonoBehaviourScript
+  prefabs:
+  - {fileID: 7931612847551622239, guid: 575a3654d3941334387fc213195182b8, type: 3}
+  - {fileID: 5299531526792070109, guid: e41527cd6c41d614db9c84efeddc9c66, type: 3}
+  - {fileID: 4069510726378133238, guid: e316b4231d16b634d87e7bfd41d5eaef, type: 3}
+  - {fileID: 1162604754442102785, guid: 6c75ff274bd1167459108ba7315a1b70, type: 3}
+  - {fileID: 7181349672147078072, guid: bfcaf5e53d4b43344b13382274b37077, type: 3}
 --- !u!1 &1994583500
 GameObject:
   m_ObjectHideFlags: 0
