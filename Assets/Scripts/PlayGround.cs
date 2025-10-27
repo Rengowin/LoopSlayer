@@ -6,8 +6,8 @@ using UnityEngine;
 public class NewMonoBehaviourScript : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    [SerializeField]
-    Fields[,] fields = new Fields[13,13];
+    //[SerializeField]
+    //GameObject[,] fields = new GameObject[13,13];
     //why erstellt man so ein zweistufiges array?
 
     [SerializeField]
@@ -22,7 +22,6 @@ public class NewMonoBehaviourScript : MonoBehaviour
     void Start()
     {
         //create gameBorad
-        fields[0, 0] = Instantiate();
 
     }
 

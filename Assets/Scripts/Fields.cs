@@ -4,7 +4,7 @@ public class Fields : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     [SerializeField]
-    int test;
+    int howMannyEnemysOneTheField = 0;
     void Start()
     {
         
@@ -15,4 +15,6 @@ public class Fields : MonoBehaviour
     {
         
     }
+
+
 }

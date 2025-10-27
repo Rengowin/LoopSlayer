@@ -42,7 +42,7 @@ public class MoveToWayPoints : MonoBehaviour
     
     private void CheckWhereTomoveTo()
     {
-        Debug.Log("we opend the check where to move");
+        //Debug.Log("we opend the check where to move");
         if (nextWayPointID < waypoints.Count)
         {
             nextWayPoint = waypoints[nextWayPointID].transform.position;
