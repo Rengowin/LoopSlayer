@@ -124,6 +124,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98684af92ef3d26479aefacb8211d48f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyScript
-  hp: 10
-  dmg: 1
-  aktspeed: 3
+  baseHp: -0.1
+  baseDmg: 0
+  baseAktSpeed: 0

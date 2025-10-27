@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class Fields : MonoBehaviour
+public class StartPath : MonoBehaviour
 {
+   
+    private int timesLooped = 0;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    [SerializeField]
-    int howMannyEnemysOneTheField = 0;
     void Start()
     {
         
@@ -16,5 +16,9 @@ public class Fields : MonoBehaviour
         
     }
 
-
+    private void OnTriggerEnter(Collider other)
+    {
+        timesLooped++;
+        Debug.Log("Anzahl der durchläufe: " + timesLooped);
+    }
 }

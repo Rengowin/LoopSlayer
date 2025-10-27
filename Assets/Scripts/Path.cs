@@ -12,7 +12,8 @@ public class Path : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        //Um zu sehen ob das script da ist :D
+        Debug.Log("Es ist da!");
     }
 
     // Update is called once per frame
@@ -21,15 +22,11 @@ public class Path : MonoBehaviour
         
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        foreach (ContactPoint contactPoint in collision.contacts)
+        if(howMannyEnemysAreOneMe > 0)
         {
-            Debug.Log("Test");
-        }
-        if (collision.relativeVelocity.magnitude > 0)
-        {
-            Debug.Log("Ja");
+            
         }
     }
 }
