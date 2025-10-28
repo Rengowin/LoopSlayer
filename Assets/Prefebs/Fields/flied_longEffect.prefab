@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 750711622926815954}
   - component: {fileID: 2329193235867065771}
   - component: {fileID: 2243178365724874274}
-  - component: {fileID: 1089027118826709032}
   m_Layer: 0
   m_Name: flied_longEffect
   m_TagString: Untagged
@@ -112,16 +111,3 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1089027118826709032
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1162604754442102785}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82e62a9102d9d8743a55f47b6cf28d8d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Fields
-  test: 0
