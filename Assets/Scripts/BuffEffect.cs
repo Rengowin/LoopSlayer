@@ -1,16 +1,12 @@
+using NUnit.Framework;
+using System.Collections.Generic;
 using UnityEngine;
-
 
 public class BuffEffect : MonoBehaviour
 {
 
     [SerializeField]
-    string buffName;
-    [SerializeField]
-    float buffAmount;
-
-    [SerializeField]
-    GameObject Player;
+    List<BuffClass> possibleBuffs = new List<BuffClass>();
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -27,11 +23,27 @@ public class BuffEffect : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Saw somethink Enter!");        
+        BuffsThatIGet buffsThatIGet = other.GetComponent<BuffsThatIGet>();
+        if(buffsThatIGet != null)
+        {
+            foreach(BuffClass buff in possibleBuffs)
+            {
+                buffsThatIGet.AddBuff(buff.BuffName(), buff.BuffAmount());
+            }
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        Debug.Log("Saw somethink Exit!");
+
+        BuffsThatIGet buffsThatIGet = other.GetComponent<BuffsThatIGet>();
+        if (buffsThatIGet != null)
+        {
+            foreach (BuffClass buff in possibleBuffs)
+            {
+                buffsThatIGet.RemoveBuff(buff.BuffName(), buff.BuffAmount());
+            }
+        }
+
     }
 }

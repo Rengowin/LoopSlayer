@@ -124,3 +124,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 444b94392879b2e4790b8b805114f9a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BuffEffect
+  possibleBuffs:
+  - buffName: HP Buff
+    buffAmount: 10
+    buffAktive: 1
+    playerOnly: 1
+    enemyOnly: 0
+    both: 0
