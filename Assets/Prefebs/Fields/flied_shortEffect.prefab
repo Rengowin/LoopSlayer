@@ -131,3 +131,15 @@ MonoBehaviour:
     playerOnly: 1
     enemyOnly: 0
     both: 0
+  - buffName: DMG Buff
+    buffAmount: 10
+    buffAktive: 1
+    playerOnly: 1
+    enemyOnly: 0
+    both: 0
+  - buffName: AKT Speed Buff
+    buffAmount: 10
+    buffAktive: 1
+    playerOnly: 1
+    enemyOnly: 0
+    both: 0

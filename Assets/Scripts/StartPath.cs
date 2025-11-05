@@ -5,6 +5,7 @@ public class StartPath : MonoBehaviour
    
     private int timesLooped = 0;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public int TimesLooped() => timesLooped;
     void Start()
     {
         

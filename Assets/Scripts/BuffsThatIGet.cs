@@ -7,12 +7,18 @@ public class BuffsThatIGet : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     string HPBuff = "HP Buff", DMGBuff = "DMG Buff", AKTSpeedBuff = "AKT Speed Buff";
 
-    List<float> HPBuffAmountTile = new List<float>();
-    List<float> DMGBuffAmountTile = new List<float>();
-    List<float> AKTSpeedBuffAmountTile = new List<float>();
+    List<float> HPBuffAddition = new List<float>();
+    List<float> DMGBuffAddition = new List<float>();
+    List<float> ATKSpeeedAddition = new List<float>();
 
-    float TotalHPBuff = 0, TotalDMGBuff, TotalAKTSpeedBuff;
+    List<float> HPBuffMultiy = new List<float>();
+    List<float> DMGBuffMultiy = new List<float>();
+    List<float> ATKSpeeedMultiy = new List<float>();
 
+    float TotalHPBuff, TotalDMGBuff, TotalAKTSpeedBuff;
+
+    [SerializeField]
+    float BaseHP, BaseDMG, BaseAKTSpeed;
 
 
     static float elapsedTime = 0;
@@ -34,58 +40,141 @@ public class BuffsThatIGet : MonoBehaviour
         {
 
             Debug.Log("Total HP Buff: " + TotalHPBuff);
+            Debug.Log("Total DMG Buff: " + TotalDMGBuff);
+            Debug.Log("Total AKT Speed Buff: " + TotalAKTSpeedBuff);
             elapsedTime = 0;
         }
 
     }
 
-    private void LateUpdate()
+    public void AddBuff(string buffName, float buffAmount, bool multi)
     {
-        
+        switch (buffName)
+        {
+            case "HP Buff":
+                if(multi)
+                {
+                    Debug.Log("Füge HP Buff Multiy hinzu: " + buffAmount);
+                    HPBuffMultiy.Add(buffAmount);
+                }
+                else
+                {
+                    Debug.Log("Füge HP Buff hinzu: " + buffAmount);
+                    HPBuffAddition.Add(buffAmount);
+                }
+                CalcBuff(HPBuffAddition, HPBuffMultiy, ref TotalHPBuff, BaseHP);
+                break;
+
+            case "DMG Buff":
+                if(multi)
+                {
+                    Debug.Log("Füge DMG Buff Multiy hinzu: " + buffAmount);
+                    DMGBuffMultiy.Add(buffAmount);
+                }
+                else
+                {
+                    Debug.Log("Füge DMG Buff hinzu: " + buffAmount);
+                    DMGBuffAddition.Add(buffAmount);
+                }
+                CalcBuff(DMGBuffAddition, DMGBuffMultiy, ref TotalDMGBuff, BaseDMG);
+                break;
+
+            case "AKT Speed Buff":
+                if(multi)
+                {
+                    Debug.Log("Füge AKT Speed Buff Multiy hinzu: " + buffAmount);
+                    ATKSpeeedMultiy.Add(buffAmount);
+                }
+                else
+                {
+                    Debug.Log("Füge AKT Speed Buff hinzu: " + buffAmount);
+                    ATKSpeeedAddition.Add(buffAmount);
+                }
+                CalcBuff(ATKSpeeedAddition, ATKSpeeedMultiy, ref TotalAKTSpeedBuff, BaseAKTSpeed, false);
+                break;
+
+            default:
+                Debug.LogWarning($"Unbekannter Buff-Typ: {buffName}");
+                break;
+        }
     }
 
-    public void AddBuff(string buffName, float buffAmount)
+    public void RemoveBuff(string buffName, float buffAmount, bool multi)
     {
-        if(buffName == HPBuff)
+        switch (buffName)
         {
-            Debug.Log("Füge HP Buff hinzu: " + buffAmount);
-            HPBuffAmountTile.Add(buffAmount);
-            TotalHPBuff = 0;
-            foreach(float buff in HPBuffAmountTile)
-            {
-                TotalHPBuff += buff;
-            }
+            case "HP Buff":
+                if (multi)
+                {
+                    Debug.Log("Füge HP Buff Multiy hinzu: " + buffAmount);
+                    HPBuffMultiy.Remove(buffAmount);
+                }
+                else
+                {
+                    Debug.Log("Füge HP Buff hinzu: " + buffAmount);
+                    HPBuffAddition.Remove(buffAmount);
+                }
+                CalcBuff(HPBuffAddition, HPBuffMultiy, ref TotalHPBuff, BaseHP);
+                break;
 
-        }
-        else if(buffName == DMGBuff)
-        {
-            //Füge DMG Buff hinzu
-        }
-        else if(buffName == AKTSpeedBuff)
-        {
-            //Füge AKT Speed Buff hinzu
+            case "DMG Buff":
+                if(multi)
+                {
+                    Debug.Log("Entferne DMG Buff Multiy: " + buffAmount);
+                    DMGBuffMultiy.Remove(buffAmount);
+                }
+                else
+                {
+                    Debug.Log("Entferne DMG Buff: " + buffAmount);
+                    DMGBuffAddition.Remove(buffAmount);
+                }
+                CalcBuff(DMGBuffAddition, DMGBuffMultiy, ref TotalDMGBuff, BaseDMG);
+                break;
+
+            case "AKT Speed Buff":
+                if(multi)
+                {
+                    Debug.Log("Entferne AKT Speed Buff Multiy: " + buffAmount);
+                    ATKSpeeedMultiy.Remove(buffAmount);
+                }
+                else
+                {
+                    Debug.Log("Entferne AKT Speed Buff: " + buffAmount);
+                    ATKSpeeedAddition.Remove(buffAmount);
+                }
+                break;
+
+            default:
+                Debug.LogWarning($"Unbekannter Buff-Typ: {buffName}");
+                break;
         }
     }
 
-    public void RemoveBuff(string buffName, float buffAmount)
+
+    private void CalcBuff(List<float> addtionons, List<float> multipliers, ref float total, float baseStat, bool grows = true)
     {
-        if (buffName == HPBuff)
+        total = baseStat;
+        if (grows)
         {
-            Debug.Log("Entferne HP Buff: " + buffAmount);
-            HPBuffAmountTile.Remove(buffAmount);
-            TotalHPBuff = 0;
-            foreach (float buff in HPBuffAmountTile)
+            foreach (float addition in addtionons)
             {
-                TotalHPBuff += buff;
+                total += addition;
+            }
+            foreach (float multiy in multipliers)
+            {
+                total *= multiy;
             }
         }
-        else if (buffName == DMGBuff)
+        else
         {
-            //Entferne DMG Buff
-        }
-        else if (buffName == AKTSpeedBuff)
-        {
-            //Entferne AKT Speed Buff
+            foreach (float addition in addtionons)
+            {
+                total -= addition;
+            }
+            foreach (float multiy in multipliers)
+            {
+                total /= multiy;
+            }
         }
     }
 }

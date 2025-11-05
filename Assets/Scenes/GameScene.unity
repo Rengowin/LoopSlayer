@@ -10619,6 +10619,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Hero
       objectReference: {fileID: 0}
+    - target: {fileID: 2306824783004065115, guid: f824ea9f8e2072a4baf8f8c7b8a31f78, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 4537799405957136515, guid: f824ea9f8e2072a4baf8f8c7b8a31f78, type: 3}
       propertyPath: 'waypoints.Array.data[0]'
       value: 
