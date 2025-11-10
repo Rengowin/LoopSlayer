@@ -1,32 +1,39 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Path : MonoBehaviour
 {
     [SerializeField]
-    int howMannyCanBeOnME = 0;
+    int maxEnemies;
+    private List<Enemy> enemiesOnPath = new List<Enemy>();
 
-    [SerializeField]
-    int howMannyEnemysAreOneMe = 0;
-
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    
+    // Gegner zu diesem Weg hinzufügen
+    public void AddEnemyToPath(Enemy enemy)
     {
-        //Um zu sehen ob das script da ist :D
-        Debug.Log("Es ist da!");
+        if (enemiesOnPath.Count < maxEnemies)
+        {
+            enemiesOnPath.Add(enemy);
+            Debug.Log($"Gegner {enemy.name} wurde dem Weg hinzugefügt.");
+        }
+        else
+        {
+            Debug.LogWarning("Maximale Anzahl an Gegnern auf diesem Weg erreicht!");
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    // Gegner an den BattleManager übergeben
     private void OnTriggerEnter(Collider other)
     {
-        if(howMannyEnemysAreOneMe > 0)
+        if (enemiesOnPath.Count == 0)
         {
-            
+        }
+        else
+        {
+            BattelManger.Instance.AddEnemy(enemiesOnPath);
+            Debug.Log($"Es wurden {enemiesOnPath.Count} Gegner an den BattleManager übergeben.");
+
+            enemiesOnPath.Clear();
         }
     }
 }
