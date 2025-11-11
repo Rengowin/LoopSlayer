@@ -39,9 +39,9 @@ public class BuffsThatIGet : MonoBehaviour
         if (elapsedTime>=4.0f)
         {
 
-            Debug.Log("Total HP Buff: " + TotalHPBuff);
-            Debug.Log("Total DMG Buff: " + TotalDMGBuff);
-            Debug.Log("Total AKT Speed Buff: " + TotalAKTSpeedBuff);
+            //Debug.Log("Total HP Buff: " + TotalHPBuff);
+            //Debug.Log("Total DMG Buff: " + TotalDMGBuff);
+            //Debug.Log("Total AKT Speed Buff: " + TotalAKTSpeedBuff);
             elapsedTime = 0;
         }
 
@@ -54,12 +54,12 @@ public class BuffsThatIGet : MonoBehaviour
             case "HP Buff":
                 if(multi)
                 {
-                    Debug.Log("Füge HP Buff Multiy hinzu: " + buffAmount);
+                    //Debug.Log("Füge HP Buff Multiy hinzu: " + buffAmount);
                     HPBuffMultiy.Add(buffAmount);
                 }
                 else
                 {
-                    Debug.Log("Füge HP Buff hinzu: " + buffAmount);
+                    //Debug.Log("Füge HP Buff hinzu: " + buffAmount);
                     HPBuffAddition.Add(buffAmount);
                 }
                 CalcBuff(HPBuffAddition, HPBuffMultiy, ref TotalHPBuff, BaseHP);
@@ -68,12 +68,12 @@ public class BuffsThatIGet : MonoBehaviour
             case "DMG Buff":
                 if(multi)
                 {
-                    Debug.Log("Füge DMG Buff Multiy hinzu: " + buffAmount);
+                    //Debug.Log("Füge DMG Buff Multiy hinzu: " + buffAmount);
                     DMGBuffMultiy.Add(buffAmount);
                 }
                 else
                 {
-                    Debug.Log("Füge DMG Buff hinzu: " + buffAmount);
+                    //Debug.Log("Füge DMG Buff hinzu: " + buffAmount);
                     DMGBuffAddition.Add(buffAmount);
                 }
                 CalcBuff(DMGBuffAddition, DMGBuffMultiy, ref TotalDMGBuff, BaseDMG);
@@ -82,12 +82,12 @@ public class BuffsThatIGet : MonoBehaviour
             case "AKT Speed Buff":
                 if(multi)
                 {
-                    Debug.Log("Füge AKT Speed Buff Multiy hinzu: " + buffAmount);
+                    //Debug.Log("Füge AKT Speed Buff Multiy hinzu: " + buffAmount);
                     ATKSpeeedMultiy.Add(buffAmount);
                 }
                 else
                 {
-                    Debug.Log("Füge AKT Speed Buff hinzu: " + buffAmount);
+                    //Debug.Log("Füge AKT Speed Buff hinzu: " + buffAmount);
                     ATKSpeeedAddition.Add(buffAmount);
                 }
                 CalcBuff(ATKSpeeedAddition, ATKSpeeedMultiy, ref TotalAKTSpeedBuff, BaseAKTSpeed, false);
@@ -106,12 +106,12 @@ public class BuffsThatIGet : MonoBehaviour
             case "HP Buff":
                 if (multi)
                 {
-                    Debug.Log("Füge HP Buff Multiy hinzu: " + buffAmount);
+                    //Debug.Log("Entferne HP Buff Multiy hinzu: " + buffAmount);
                     HPBuffMultiy.Remove(buffAmount);
                 }
                 else
                 {
-                    Debug.Log("Füge HP Buff hinzu: " + buffAmount);
+                    //Debug.Log("Entferne HP Buff hinzu: " + buffAmount);
                     HPBuffAddition.Remove(buffAmount);
                 }
                 CalcBuff(HPBuffAddition, HPBuffMultiy, ref TotalHPBuff, BaseHP);
@@ -120,12 +120,12 @@ public class BuffsThatIGet : MonoBehaviour
             case "DMG Buff":
                 if(multi)
                 {
-                    Debug.Log("Entferne DMG Buff Multiy: " + buffAmount);
+                    //Debug.Log("Entferne DMG Buff Multiy: " + buffAmount);
                     DMGBuffMultiy.Remove(buffAmount);
                 }
                 else
                 {
-                    Debug.Log("Entferne DMG Buff: " + buffAmount);
+                    //Debug.Log("Entferne DMG Buff: " + buffAmount);
                     DMGBuffAddition.Remove(buffAmount);
                 }
                 CalcBuff(DMGBuffAddition, DMGBuffMultiy, ref TotalDMGBuff, BaseDMG);
@@ -134,12 +134,12 @@ public class BuffsThatIGet : MonoBehaviour
             case "AKT Speed Buff":
                 if(multi)
                 {
-                    Debug.Log("Entferne AKT Speed Buff Multiy: " + buffAmount);
+                    //Debug.Log("Entferne AKT Speed Buff Multiy: " + buffAmount);
                     ATKSpeeedMultiy.Remove(buffAmount);
                 }
                 else
                 {
-                    Debug.Log("Entferne AKT Speed Buff: " + buffAmount);
+                    //Debug.Log("Entferne AKT Speed Buff: " + buffAmount);
                     ATKSpeeedAddition.Remove(buffAmount);
                 }
                 break;

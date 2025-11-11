@@ -12,8 +12,6 @@ public class BattelManger : MonoBehaviour
     private Player player;
     float tempMovementSpeed;
     bool battelActive = false;
-
-    public List<Enemy> Enemies { get => enemies; set => enemies = value; }
     public bool BattelActive { get => battelActive; set => battelActive = value; }
 
 void Start()
@@ -27,33 +25,44 @@ void Start()
     {
         if (battelActive)
         {
-            if(player.Speed != 0)
-            {
-                tempMovementSpeed = player.Speed;
-                player.Speed = 0;
-            }
-            player.UpdateActionTimer();
+            battelLoop();
+        }
+    }
+
+    private void battelLoop()
+    {
+        if (player.Speed != 0)
+        {
+            tempMovementSpeed = player.Speed;
+            player.Speed = 0;
+        }
+        {
+            Debug.Log("fight start");
+            player.UpdateActionTimer(Time.deltaTime);
             foreach (Enemy enemy in enemies)
             {
-                enemy.UpdateActionTimer();
+                enemy.UpdateActionTimer(Time.deltaTime);
             }
             if (player.IsActionReady())
             {
+                Debug.Log("Es sollte angreifen mal schauen vom Spieler :D");
                 PlayerAction();
                 player.ResetActionTimer();
             }
             foreach (Enemy enemy in enemies)
             {
+                Debug.Log("Es sollte angreifen mal schauen vom gegner :D");
                 if (enemy.IsActionReady())
                 {
                     EnemyAction(enemy);
                     enemy.ResetActionTimer();
                 }
             }
-            if(enemies.Count == 0)
+            if (enemies.Count == 0)
             {
                 battelActive = false;
                 player.Speed = tempMovementSpeed;
+                Debug.Log("Player HP nach dem fight ist: " + player.HP);
             }
         }
     }
@@ -61,10 +70,12 @@ void Start()
     public void EnemyAction(Enemy enemy)
     {
         player.HP -= enemy.DMG;
+        Debug.Log("Der Spieler hat: " + enemy.DMG + "dmg bekommen");
     }
 
     public void PlayerAction()
     {
+        Debug.Log("Player Action: der spieler hat: " + player.Dmg + "dmg");
         int attackCount = Mathf.Min(player.ATKCount, enemies.Count);
         List<Enemy> availableEnemies = new List<Enemy>(enemies);
 
@@ -85,6 +96,7 @@ void Start()
         foreach(Enemy enemy in enemiesFromPath)
         {
             enemies.Add(enemy);
+            Debug.Log("Es wurde ein gegen zur liste hinzugefügt");
         }
     }
 

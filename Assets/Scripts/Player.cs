@@ -56,13 +56,14 @@ public class Player : MonoBehaviour
         currentActionTimer = aktSpeed;
     }
 
-    public void UpdateActionTimer()
+    public void UpdateActionTimer(float deltatime)
     {
-        currentActionTimer -= Time.deltaTime;
+        currentActionTimer -= deltatime;
     }
 
     public bool IsActionReady()
     {
+        Debug.Log("Kann Aangreifen");
         return currentActionTimer <= 0;
     }
     public void ResetActionTimer()

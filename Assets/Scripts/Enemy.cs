@@ -15,6 +15,7 @@ public class Enemy : MonoBehaviour
     float dropChance;
 
     int scoreOneKill;
+    int dropAmount;
 
     float currentActionTimer;
 
@@ -54,7 +55,7 @@ public class Enemy : MonoBehaviour
     {
     }
 
-    public void Init(EnemySpawnData spawnData , int anzLoops = 0)
+    public void Init(EnemySpawnData spawnData, int anzLoops = 0)
     {
         data = spawnData;
 
@@ -64,6 +65,8 @@ public class Enemy : MonoBehaviour
         scoreOneKill = data.ScoreOneKill() + (int)(data.ScoreOneKill() * anzLoops); //TODO: vlt zu starkes score scaling wenn fertig ist anschauen :D
         dropChance = data.BaseDropChance();
         currentActionTimer = aktSpeed;
+        dropAmount = data.UpgradePointsOnKill();
+        this.battelManger = FindObjectOfType<BattelManger>();
     }
 
     // Update is called once per frame
@@ -73,13 +76,14 @@ public class Enemy : MonoBehaviour
     }
 
 
-    public void UpdateActionTimer()
+    public void UpdateActionTimer(float deltaTime)
     {
-        currentActionTimer -= Time.deltaTime;
+        currentActionTimer -= deltaTime;
     }
 
     public bool IsActionReady()
     {
+        Debug.Log("Es kann angreifen");
         return currentActionTimer <= 0;
     }
     public void ResetActionTimer()
@@ -94,7 +98,7 @@ public class Enemy : MonoBehaviour
             UpgradeManager upgradeManager = FindObjectOfType<UpgradeManager>();
             if (upgradeManager != null)
             {
-                upgradeManager.getUpgratePoint();
+                upgradeManager.getUpgratePoint(dropAmount);
             }
         }
         

@@ -10,11 +10,16 @@ public class Path : MonoBehaviour
     private BattelManger battelManger;
     private Vector3 spawnPoint;
 
-    
+    private void Start()
+    {
+        battelManger = FindObjectOfType<BattelManger>();
+    }
+
+
     // Gegner zu diesem Weg hinzufügen
     public void AddEnemyToPath(Enemy enemy)
     {
-        if(enemiesOnPath.Count <= maxEnemies)
+        if (canSpawn())
         {
             enemiesOnPath.Add(enemy);
         }
@@ -32,11 +37,23 @@ public class Path : MonoBehaviour
         }
         else
         {
-            battelManger.Enemies = enemiesOnPath;
+            battelManger.AddEnemy(enemiesOnPath);
             battelManger.BattelActive = true;
             Debug.Log($"Es wurden {enemiesOnPath.Count} Gegner an den BattleManager übergeben.");
 
             enemiesOnPath.Clear();
+        }
+    }
+
+    public bool canSpawn()
+    {
+        if (enemiesOnPath.Count <= maxEnemies)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 

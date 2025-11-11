@@ -41,6 +41,8 @@ public class MoveToWayPoints : MonoBehaviour
             distance = Vector3.Distance(currentPosition, nextWayPoint);
             transform.position += Vector3.ClampMagnitude(directionTowardsWaypoint.normalized * movementSpeed*Time.deltaTime, distance);
         }
+
+        movementSpeed = player.Speed;
     }
     
     private void CheckWhereTomoveTo()

@@ -2,6 +2,14 @@ using UnityEngine;
 
 public class UpgradeManager : MonoBehaviour
 {
+    [SerializeField]
+    int upgradePoints;
+
+    public int UpgradePoints
+    {
+        get => upgradePoints;
+        set => upgradePoints = value;
+    }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -15,8 +23,9 @@ public class UpgradeManager : MonoBehaviour
     }
 
 
-    public void getUpgratePoint()
+    public void getUpgratePoint(int amount)
     {
-        Debug.Log("Upgrade Point Acquired!");
+        upgradePoints++;
+        Debug.Log("Upgrade Point gained! Total: " + upgradePoints);
     }
 }

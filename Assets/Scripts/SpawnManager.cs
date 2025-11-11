@@ -13,13 +13,15 @@ public class SpawnManager : MonoBehaviour
 
     List<EnemySpawnData> possibleSpawns = new List<EnemySpawnData>();
 
-    int anzDerLoops = 0;
+    private StartPath startPath;
+
+    int anzDerLoops;
 
     private float timer = 0f;
 
     void Start()
     {
-        
+        startPath = FindObjectOfType<StartPath>();
     }
 
     // Update is called once per frame
@@ -35,7 +37,7 @@ public class SpawnManager : MonoBehaviour
 
     private void SpawnEnemy()
     {
-
+        anzDerLoops = startPath.TimesLooped;
         {
             lookForPossibleSpawns();
 
@@ -48,8 +50,13 @@ public class SpawnManager : MonoBehaviour
                     return;
                 }
                 //TODO: Gegner werden nicht auf gehalten mit dem spawene -.- hier muss der check hin für den spawn nicht in path!!
-                GameObject enemy = chosenEnemy.EnemyPrefab1();
-                GameObject enemyInstance = Instantiate(enemy, possiblePaths.GetSpawnPoint(), Quaternion.identity);
+                if (possiblePaths.canSpawn() == true)
+                {
+                    GameObject enemyObject = Instantiate(chosenEnemy.EnemyPrefab1(), possiblePaths.GetSpawnPoint(), Quaternion.identity);
+                    Enemy enemy = enemyObject.GetComponent<Enemy>();
+                    enemy.Init(chosenEnemy, anzDerLoops);
+                    possiblePaths.AddEnemyToPath(enemy);
+                }
             }
         }
     }
