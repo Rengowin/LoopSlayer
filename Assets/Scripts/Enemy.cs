@@ -1,32 +1,31 @@
 using System;
+using UnityEditor;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    private EnemySpawnData data;
+
     [SerializeField]
-    float baseHP;
-    [SerializeField]
-    float baseDMG;
-    [SerializeField]
-    float baseAKTSpeed;
-    [SerializeField]
-    float baseDropChance;
+    BattelManger battelManger;
 
     float hp;
     float dmg;
     float aktSpeed;
     float dropChance;
 
+    int scoreOneKill;
+
     float currentActionTimer;
 
     public float HP{
-        get => baseHP;
+        get => hp;
         set
         {
-            baseHP = value;
-            if(baseHP <= 0)
+            hp = value;
+            if(hp <= 0)
             {
-                baseHP = 0;
+                hp = 0;
                 Die();
             }
         }
@@ -34,24 +33,36 @@ public class Enemy : MonoBehaviour
 
     public float DMG
     {
-        get => dmg; set => baseDMG = dmg;
+        get => dmg; set => dmg = value;
     }
     public float AktSpeed
     {
-        get => baseAKTSpeed; set => baseAKTSpeed = value;
+        get => aktSpeed; set => aktSpeed = value;
     }
     public float DropChance
     {
-        get => baseDropChance; set => baseDropChance = value;
+        get => dropChance; set => dropChance = value;
+    }
+
+    public int ScoreOneKill
+    {
+        get => scoreOneKill; set => scoreOneKill = value;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        hp = baseHP;
-        dmg = baseDMG;
-        aktSpeed = baseAKTSpeed;
-        dropChance = baseDropChance;
+    }
+
+    public void Init(EnemySpawnData spawnData , int anzLoops = 0)
+    {
+        data = spawnData;
+
+        hp = (float)(data.BaseHealth() * Math.Pow(data.ScalePerLoop(), anzLoops));
+        dmg = (float)(data.BaseDamage() * Math.Pow(data.ScalePerLoop(), anzLoops));
+        aktSpeed = data.BaseAktSpeed();
+        scoreOneKill = data.ScoreOneKill() + (int)(data.ScoreOneKill() * anzLoops); //TODO: vlt zu starkes score scaling wenn fertig ist anschauen :D
+        dropChance = data.BaseDropChance();
         currentActionTimer = aktSpeed;
     }
 
@@ -60,6 +71,7 @@ public class Enemy : MonoBehaviour
     {
         
     }
+
 
     public void UpdateActionTimer()
     {
@@ -86,7 +98,7 @@ public class Enemy : MonoBehaviour
             }
         }
         
-        BattelManger.Instance.RemoveEnemy(this);
+        battelManger.RemoveEnemy(this);
         Destroy(gameObject);
     }
 }

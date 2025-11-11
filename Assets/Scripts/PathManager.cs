@@ -10,6 +10,17 @@ public class PathManger : MonoBehaviour
     [SerializeField]
     float spawnInterval;
 
+    [SerializeField]
+    float spawnChance = 0.3f;
+
+    public List<Path> Paths { get => paths; }
+
+    public float SpawnInterval { get => spawnInterval; }
+
+    public float SpawnChance { get => spawnChance;
+        set { spawnChance = value; }
+    }
+
     void Awake()
     {
         // Alle Wege in der Szene finden und zur Liste hinzufügen

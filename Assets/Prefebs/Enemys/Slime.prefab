@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5840210393190203355}
   - component: {fileID: 5290829480420254317}
   - component: {fileID: 6226008431883243294}
-  - component: {fileID: 4130961279866166376}
+  - component: {fileID: 1469027452776185102}
   m_Layer: 0
   m_Name: Slime
   m_TagString: Untagged
@@ -112,7 +112,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4130961279866166376
+--- !u!114 &1469027452776185102
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -121,9 +121,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 7418679056324927084}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98684af92ef3d26479aefacb8211d48f, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e601eb24fa451f4ba3fd28b30eb4500, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyScript
-  baseHp: -0.1
-  baseDmg: 0
-  baseAktSpeed: 0
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  baseHP: 10
+  baseDMG: 1
+  baseAKTSpeed: 4
+  baseDropChance: 10
+  scoreOneKill: 20
+  scalePerLoop: 1
+  minDifficulty: 0
+  upgradePointOnDrop: 1
