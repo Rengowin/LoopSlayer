@@ -61,7 +61,6 @@ public class Player : MonoBehaviour
 
     public bool IsActionReady()
     {
-        Debug.Log("Kann Aangreifen");
         return currentActionTimer <= 0;
     }
     public void ResetActionTimer()

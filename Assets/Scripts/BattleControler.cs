@@ -9,8 +9,7 @@ public class BattelControler : MonoBehaviour
     Player player;
     BattelManger battelManger;
     List<Enemy> enemys = new List<Enemy>();
-
-    [SerializeField] private Spawn2DManager spawn2DManager;
+    Spawn2DManager spawn2DManager;
 
     public Player Player
     {
@@ -27,7 +26,12 @@ public class BattelControler : MonoBehaviour
         set => enemys = value;
     }
 
-    
+    public Spawn2DManager Spawn2DManager
+    {
+        get => spawn2DManager;
+    }
+
+
 
     float tempMovementSpeed, tempSpawnInterval;
 
@@ -58,16 +62,35 @@ public class BattelControler : MonoBehaviour
     {
         tempMovementSpeed = player.Speed;
         player.Speed = 0;
-        GameController.Instance.spawnActiv = false;
-        battelManger.BattelActive = true;
-
-
         SceneToggleManager.Instance.LoadFightScene();
+        GameController.Instance.spawnActiv = false;
+        battelManger.Enemies = enemys;
+        battelManger.Player = player;
+
+        battelManger.BattelActive = true;
+        
+
+
     }
 
     public void spawnEnemysAfterSecenLoad()
     {
-        spawn2DManager = Spawn2DManager.Instance;
+        spawn2DManager = FindObjectOfType<Spawn2DManager>();
+        int enemyCount = (enemys == null) ? 0 : enemys.Count;
+        Debug.Log($"spawnEnemysAfterSecenLoad: Spawn2DManager found={(spawn2DManager != null)}, enemysCount={enemyCount}");
+
+        if (spawn2DManager == null)
+        {
+            Debug.LogError("spawnEnemysAfterSecenLoad: Kein Spawn2DManager gefunden. Spawn abgebrochen.");
+            return;
+        }
+
+        if (enemys == null || enemys.Count == 0)
+        {
+            Debug.LogWarning("spawnEnemysAfterSecenLoad: Keine Gegner in der Liste (enemys). Nichts zum Spawnen.");
+            return;
+        }
+
         spawn2DManager.SpawnEnemy(enemys);
     }
 
@@ -76,6 +99,7 @@ public class BattelControler : MonoBehaviour
         player.Speed = tempMovementSpeed;
         GameController.Instance.spawnActiv = true;
 
+        enemys?.Clear();
 
         SceneToggleManager.Instance.UnloadFightScene();
     }
@@ -88,9 +112,23 @@ public class BattelControler : MonoBehaviour
         }
     }
 
-    public void RemoveEnemy(Enemy enemy) { 
+    public void RemoveEnemy(Enemy enemy)
+    {
+        // Entferne den Gegner aus der Battle-Liste
         enemys.Remove(enemy);
-        if(enemys.Count == 0)
+
+        // Informiere den Spawn2DManager, dass der Gegner entfernt wurde
+        if (spawn2DManager != null)
+        {
+            spawn2DManager.EnemieDied(enemy.gameObject); // Übergibt das GameObject der Enemy-Instanz
+        }
+        else
+        {
+            Debug.LogWarning("Spawn2DManager ist null. Enemy konnte nicht aus der Visual-Liste entfernt werden.");
+        }
+
+        // Beende den Kampf, wenn keine Gegner mehr übrig sind
+        if (enemys.Count == 0)
         {
             EndBattle();
         }

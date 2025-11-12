@@ -13,10 +13,11 @@ public class BattelManger : MonoBehaviour
     Player player;
     bool battelActive = false;
     public bool BattelActive { get => battelActive; set => battelActive = value; }
+    public List<Enemy> Enemies { get => enemies; set => enemies = value; }
+    public Player Player { get => player; set => player = value; }
 
     void Start()
     {
-        player = BattelControler.Instance.Player;
     }
 
     // Update is called once per frame

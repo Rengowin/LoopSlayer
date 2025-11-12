@@ -95,7 +95,7 @@ public class Enemy : MonoBehaviour
 
     void Die()
     {
-        if(UnityEngine.Random.value < DropChance)
+        if (UnityEngine.Random.value < DropChance)
         {
             UpgradeManager upgradeManager = FindObjectOfType<UpgradeManager>();
             if (upgradeManager != null)
@@ -103,9 +103,22 @@ public class Enemy : MonoBehaviour
                 upgradeManager.getUpgratePoint(dropAmount);
             }
         }
-        Spawn2DManager.Instance.EnemieDied(gameObject);
+
+        // Entferne das Visual über den Spawn2DManager
+        if (BattelControler.Instance.Spawn2DManager != null)
+        {
+            Debug.Log($"Enemy.Die: Calling EnemieDied for {gameObject.name}");
+            BattelControler.Instance.Spawn2DManager.EnemieDied(gameObject);
+        }
+        else
+        {
+            Debug.LogError("Spawn2DManager is null in Enemy.Die()");
+        }
+
+        // Entferne den Gegner aus der Battle-Liste
         BattelControler.Instance.Enemys.Remove(this);
 
+        // Zerstöre das Enemy-Objekt
         Destroy(gameObject);
     }
 }

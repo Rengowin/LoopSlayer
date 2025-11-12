@@ -226,7 +226,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PathManger
   paths: []
-  spawnInterval: 5
+  spawnInterval: 1
 --- !u!1001 &36688078
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9165,7 +9165,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
   hp: 100
-  dmg: 10
+  dmg: 30
   speed: 1
   aktSpeed: 4
   atkCount: 1
@@ -10835,7 +10835,7 @@ MonoBehaviour:
   - EnemyPrefab: {fileID: 0}
     enemyName: Nothing
     tier: 0
-    spawnChance: 0.8
+    spawnChance: 0.3
     unlocked: 1
     baseHealth: 0
     baseDamage: 0
@@ -10847,9 +10847,9 @@ MonoBehaviour:
   - EnemyPrefab: {fileID: 7418679056324927084, guid: d8e7c73423b568f4ca26b0e9db7cba8a, type: 3}
     enemyName: Slime
     tier: 0
-    spawnChance: 0.3
+    spawnChance: 0.5
     unlocked: 1
-    baseHealth: 10
+    baseHealth: 100
     baseDamage: 1
     baseAktSpeed: 5
     scalePerLoop: 1
