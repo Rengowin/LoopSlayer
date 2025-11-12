@@ -8,6 +8,11 @@ public class Spawn2DManager : MonoBehaviour
     [SerializeField]
     List<GameObject> enemyPrefabs = new List<GameObject>();
 
+    [SerializeField]
+    private GameObject enemyUIPrefab;
+    [SerializeField]
+    private Canvas worldCanvas;
+
     private List<EnemyVisualPair> activeEnemy = new List<EnemyVisualPair>();
 
     public bool IsInitialized { get; private set; } = false;
@@ -43,6 +48,8 @@ public class Spawn2DManager : MonoBehaviour
 
             GameObject visual = Instantiate(prefab, spawnCorts[i], Quaternion.identity);
             activeEnemy.Add(new EnemyVisualPair(enemies[i], visual));
+
+            GameObject ui = Instantiate(enemyUIPrefab, worldCanvas.transform);
 
             Debug.Log($"Spawned EnemyVisualPair: Enemy={enemies[i].Name}, Visual={visual.name}");
         }
