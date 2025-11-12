@@ -8,12 +8,7 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     List<EnemySpawnData> enemys = new List<EnemySpawnData>();
 
-    [SerializeField]
-    PathManger pathManger;
-
     List<EnemySpawnData> possibleSpawns = new List<EnemySpawnData>();
-
-    private StartPath startPath;
 
     int anzDerLoops;
 
@@ -21,27 +16,29 @@ public class SpawnManager : MonoBehaviour
 
     void Start()
     {
-        startPath = FindObjectOfType<StartPath>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        timer += Time.deltaTime;
-        if (timer > pathManger.SpawnInterval)
+        if (GameController.Instance.spawnActiv)
         {
-            timer = 0f;
-            SpawnEnemy();
+            timer += Time.deltaTime;
+            if (timer > GameController.Instance.PathManager.SpawnInterval)
+            {
+                timer = 0f;
+                SpawnEnemy();
+            }
         }
     }
 
     private void SpawnEnemy()
     {
-        anzDerLoops = startPath.TimesLooped;
+        anzDerLoops = GameController.Instance.PathManager.StartPath.TimesLooped;
         {
             lookForPossibleSpawns();
 
-            foreach (Path possiblePaths in pathManger.Paths)
+            foreach (Path possiblePaths in GameController.Instance.PathManager.Paths)
             {
                 EnemySpawnData chosenEnemy = ChooseWeigtedEnemy();
                 if (chosenEnemy.EnemyPrefab1() == null)
@@ -49,7 +46,6 @@ public class SpawnManager : MonoBehaviour
                     Debug.Log("No Enemy spawend");
                     return;
                 }
-                //TODO: Gegner werden nicht auf gehalten mit dem spawene -.- hier muss der check hin für den spawn nicht in path!!
                 if (possiblePaths.canSpawn() == true)
                 {
                     GameObject enemyObject = Instantiate(chosenEnemy.EnemyPrefab1(), possiblePaths.GetSpawnPoint(), Quaternion.identity);

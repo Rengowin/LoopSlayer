@@ -2,6 +2,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BattelManger : MonoBehaviour
 {
@@ -9,21 +10,19 @@ public class BattelManger : MonoBehaviour
 
     List<Enemy> enemies = new List<Enemy>();
 
-    private Player player;
-    float tempMovementSpeed;
+    Player player;
     bool battelActive = false;
     public bool BattelActive { get => battelActive; set => battelActive = value; }
 
-void Start()
+    void Start()
     {
-        player = FindObjectOfType<Player>();
-        Debug.Log("Player found "+player.Speed);
+        player = BattelControler.Instance.Player;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (battelActive)
+        if(battelActive)
         {
             battelLoop();
         }
@@ -31,13 +30,7 @@ void Start()
 
     private void battelLoop()
     {
-        if (player.Speed != 0)
         {
-            tempMovementSpeed = player.Speed;
-            player.Speed = 0;
-        }
-        {
-            Debug.Log("fight start");
             player.UpdateActionTimer(Time.deltaTime);
             foreach (Enemy enemy in enemies)
             {
@@ -45,13 +38,11 @@ void Start()
             }
             if (player.IsActionReady())
             {
-                Debug.Log("Es sollte angreifen mal schauen vom Spieler :D");
                 PlayerAction();
                 player.ResetActionTimer();
             }
             foreach (Enemy enemy in enemies)
             {
-                Debug.Log("Es sollte angreifen mal schauen vom gegner :D");
                 if (enemy.IsActionReady())
                 {
                     EnemyAction(enemy);
@@ -61,7 +52,7 @@ void Start()
             if (enemies.Count == 0)
             {
                 battelActive = false;
-                player.Speed = tempMovementSpeed;
+                BattelControler.Instance.EndBattle();
                 Debug.Log("Player HP nach dem fight ist: " + player.HP);
             }
         }
@@ -89,19 +80,5 @@ void Start()
             availableEnemies.RemoveAt(randomIndex);
         }
 
-    }
-
-    public void AddEnemy(List<Enemy> enemiesFromPath)
-    {
-        foreach(Enemy enemy in enemiesFromPath)
-        {
-            enemies.Add(enemy);
-            Debug.Log("Es wurde ein gegen zur liste hinzugefügt");
-        }
-    }
-
-    public void RemoveEnemy(Enemy enemy)
-    {
-        enemies.Remove(enemy);
     }
 }

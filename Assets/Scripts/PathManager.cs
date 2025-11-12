@@ -2,7 +2,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PathManger : MonoBehaviour
+public class PathManager : MonoBehaviour
 {
     [SerializeField]
     List<Path> paths = new List<Path>();
@@ -10,16 +10,16 @@ public class PathManger : MonoBehaviour
     [SerializeField]
     float spawnInterval;
 
-    [SerializeField]
-    float spawnChance = 0.3f;
+    StartPath startPath;
+    int anzDerLoops;
 
+    public int AnzDerLoops { get => anzDerLoops; set => anzDerLoops = value; }
     public List<Path> Paths { get => paths; }
 
-    public float SpawnInterval { get => spawnInterval; }
+    public StartPath StartPath { get => startPath; }
 
-    public float SpawnChance { get => spawnChance;
-        set { spawnChance = value; }
-    }
+    public float SpawnInterval { get => spawnInterval; set => spawnInterval = value; }
+
 
     void Awake()
     {
@@ -31,12 +31,12 @@ public class PathManger : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        startPath = FindObjectOfType<StartPath>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        anzDerLoops = startPath.TimesLooped;
     }
 }

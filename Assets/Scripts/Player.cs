@@ -15,8 +15,6 @@ public class Player : MonoBehaviour
 
     float currentActionTimer;
 
-    bool isAlive = true;
-
     public float HP
     {
         get => hp;
@@ -25,7 +23,7 @@ public class Player : MonoBehaviour
             hp = value;
             if(hp <= 0)
             {
-                isAlive = false;
+                GameController.Instance.GameOver();
                 hp = 0;
                 Debug.Log("Player is dead.");
             }

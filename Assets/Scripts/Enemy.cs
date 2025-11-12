@@ -6,8 +6,7 @@ public class Enemy : MonoBehaviour
 {
     private EnemySpawnData data;
 
-    [SerializeField]
-    BattelManger battelManger;
+    string name;
 
     float hp;
     float dmg;
@@ -32,6 +31,10 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    public string Name
+    {
+        get => name; set => name = value;
+    }
     public float DMG
     {
         get => dmg; set => dmg = value;
@@ -58,7 +61,7 @@ public class Enemy : MonoBehaviour
     public void Init(EnemySpawnData spawnData, int anzLoops = 0)
     {
         data = spawnData;
-
+        name = data.EnemyName();
         hp = (float)(data.BaseHealth() * Math.Pow(data.ScalePerLoop(), anzLoops));
         dmg = (float)(data.BaseDamage() * Math.Pow(data.ScalePerLoop(), anzLoops));
         aktSpeed = data.BaseAktSpeed();
@@ -66,7 +69,6 @@ public class Enemy : MonoBehaviour
         dropChance = data.BaseDropChance();
         currentActionTimer = aktSpeed;
         dropAmount = data.UpgradePointsOnKill();
-        this.battelManger = FindObjectOfType<BattelManger>();
     }
 
     // Update is called once per frame
@@ -101,8 +103,9 @@ public class Enemy : MonoBehaviour
                 upgradeManager.getUpgratePoint(dropAmount);
             }
         }
-        
-        battelManger.RemoveEnemy(this);
+        Spawn2DManager.Instance.EnemieDied(gameObject);
+        BattelControler.Instance.Enemys.Remove(this);
+
         Destroy(gameObject);
     }
 }

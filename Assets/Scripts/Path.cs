@@ -37,8 +37,8 @@ public class Path : MonoBehaviour
         }
         else
         {
-            battelManger.AddEnemy(enemiesOnPath);
-            battelManger.BattelActive = true;
+            BattelControler.Instance.Enemys = enemiesOnPath;
+            BattelControler.Instance.StartBattle();
             Debug.Log($"Es wurden {enemiesOnPath.Count} Gegner an den BattleManager übergeben.");
 
             enemiesOnPath.Clear();

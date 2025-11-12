@@ -26,6 +26,5 @@ public class UpgradeManager : MonoBehaviour
     public void getUpgratePoint(int amount)
     {
         upgradePoints++;
-        Debug.Log("Upgrade Point gained! Total: " + upgradePoints);
     }
 }
