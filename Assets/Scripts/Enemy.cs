@@ -95,30 +95,41 @@ public class Enemy : MonoBehaviour
 
     void Die()
     {
+        // Drops
         if (UnityEngine.Random.value < DropChance)
         {
-            UpgradeManager upgradeManager = FindObjectOfType<UpgradeManager>();
-            if (upgradeManager != null)
+            var upgradeController = FindObjectOfType<UpgradeController>();
+            if (upgradeController != null)
             {
-                upgradeManager.getUpgratePoint(dropAmount);
+                upgradeController.UpgradePoints += dropAmount;
             }
         }
 
-        // Entferne das Visual über den Spawn2DManager
+        // --- Visual + UI korrekt entfernen ---
         if (BattelControler.Instance.Spawn2DManager != null)
         {
-            Debug.Log($"Enemy.Die: Calling EnemieDied for {gameObject.name}");
-            BattelControler.Instance.Spawn2DManager.EnemieDied(gameObject);
+            // Hole das gesamte Pair
+            EnemyVisualPair pair = BattelControler.Instance.Spawn2DManager.GetPairForEnemy(this);
+
+            if (pair != null)
+            {
+                BattelControler.Instance.Spawn2DManager.EnemieDied(pair.visual);
+            }
+            else
+            {
+                Debug.LogError("Enemy.Die(): Kein EnemyVisualPair für " + Name + " gefunden!");
+            }
         }
         else
         {
             Debug.LogError("Spawn2DManager is null in Enemy.Die()");
         }
 
-        // Entferne den Gegner aus der Battle-Liste
+        // Gegner aus Battle-Liste entfernen
         BattelControler.Instance.Enemys.Remove(this);
 
-        // Zerstöre das Enemy-Objekt
+        // Enemy Script GameObject löschen
         Destroy(gameObject);
     }
+
 }

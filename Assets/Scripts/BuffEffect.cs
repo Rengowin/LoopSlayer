@@ -28,7 +28,7 @@ public class BuffEffect : MonoBehaviour
         {
             foreach(BuffClass buff in possibleBuffs)
             {
-                buffsThatIGet.AddBuff(buff.BuffName(), buff.BuffAmount(), buff.Multiply());
+                buffsThatIGet.AddBuff(buff.BuffName, buff.BuffAmount, buff.Multiply);
             }
         }
     }
@@ -41,7 +41,7 @@ public class BuffEffect : MonoBehaviour
         {
             foreach (BuffClass buff in possibleBuffs)
             {
-                buffsThatIGet.RemoveBuff(buff.BuffName(), buff.BuffAmount(), buff.Multiply());
+                buffsThatIGet.RemoveBuff(buff.BuffName, buff.BuffAmount, buff.Multiply);
             }
         }
 

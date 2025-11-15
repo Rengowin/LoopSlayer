@@ -1,96 +1,103 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Spawn2DManager : MonoBehaviour
 {
-    List<Vector3> spawnCorts = new List<Vector3>();
+    [Header("Enemy Prefabs")]
+    [SerializeField] private List<GameObject> enemyPrefabs = new List<GameObject>();
 
-    [SerializeField]
-    List<GameObject> enemyPrefabs = new List<GameObject>();
-
-    [SerializeField]
-    private GameObject enemyUIPrefab;
-    [SerializeField]
-    private Canvas worldCanvas;
-
-    private List<EnemyVisualPair> activeEnemy = new List<EnemyVisualPair>();
+    private List<Vector3> spawnPoints = new List<Vector3>();
+    private List<EnemyVisualPair> activeEnemies = new List<EnemyVisualPair>();
 
     public bool IsInitialized { get; private set; } = false;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        spawnCorts.Add(new Vector3(4, 3, 0));
-        spawnCorts.Add(new Vector3(4, -1, 0));
-        spawnCorts.Add(new Vector3(2, 4.5f, 0));
-        spawnCorts.Add(new Vector3(2, -2.5f, 0));
-        spawnCorts.Add(new Vector3(4, 1, 0));
-        Debug.Log("Spawn2DManager: spawnCorts are set!");
+        // Feste UI-Positionen für Gegner im 2D Fight
+        spawnPoints.Add(new Vector3(4, 3, 0));
+        spawnPoints.Add(new Vector3(4, -1, 0));
+        spawnPoints.Add(new Vector3(2, 4.5f, 0));
+        spawnPoints.Add(new Vector3(2, -2.5f, 0));
+        spawnPoints.Add(new Vector3(4, 1, 0));
+
+        Debug.Log("Spawn2DManager initialized.");
         IsInitialized = true;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
+    // -------------------------------------------------
+    // Gegner spawnen (UI NICHT hier bauen)
+    // -------------------------------------------------
     public void SpawnEnemy(List<Enemy> enemies)
     {
-        for (int i = 0; i < enemies.Count && i < spawnCorts.Count; i++)
+        // reset UI index + lösche alte UI
+        BattleUIController.Instance.ResetEnemyUIIndex();
+
+        for (int i = 0; i < enemies.Count && i < spawnPoints.Count; i++)
         {
-            GameObject prefab = GetEnemyPrefab(enemies[i].Name);
-            if (prefab == null)
-            {
-                Debug.LogWarning($"No prefab found for enemy: {enemies[i].Name}");
-                continue;
-            }
+            Enemy enemy = enemies[i];
+            GameObject prefab = GetEnemyPrefab(enemy.Name);
+            GameObject visual = Instantiate(prefab, spawnPoints[i], Quaternion.identity);
 
-            GameObject visual = Instantiate(prefab, spawnCorts[i], Quaternion.identity);
-            activeEnemy.Add(new EnemyVisualPair(enemies[i], visual));
+            EnemyVisualPair pair = new EnemyVisualPair(enemy, visual);
+            activeEnemies.Add(pair);
 
-            GameObject ui = Instantiate(enemyUIPrefab, worldCanvas.transform);
-
-            Debug.Log($"Spawned EnemyVisualPair: Enemy={enemies[i].Name}, Visual={visual.name}");
+            GameObject uiObj = BattleUIController.Instance.CreateEnemyUIAndReturn(enemy);
+            pair.uiObject = uiObj;
         }
     }
 
-    private GameObject GetEnemyPrefab(string enemyName)
+
+    // -------------------------------------------------
+    // Prefab lookup
+    // -------------------------------------------------
+    private GameObject GetEnemyPrefab(string name)
     {
-        switch (enemyName)
+        switch (name)
         {
             case "Slime":
                 return enemyPrefabs[0];
             case "Bat":
                 return enemyPrefabs[1];
             default:
-                Debug.Log("No prefab found for enemy: " + enemyName);
                 return null;
         }
     }
+
+    // -------------------------------------------------
+    // Gegner sterben → Visual enfernen + UI entfernen
+    // -------------------------------------------------
     public void EnemieDied(GameObject enemyVisual)
     {
-        Debug.Log($"EnemieDied called for visual: {enemyVisual.name}");
+        Debug.Log("EnemieDied() called for: " + enemyVisual.name);
 
-        // Suche nach dem Pair
-        EnemyVisualPair pair = activeEnemy.Find(e => e.visual == enemyVisual);
+        EnemyVisualPair pair = activeEnemies.Find(p => p.visual == enemyVisual);
 
         if (pair != null)
         {
-            Debug.Log($"EnemyVisualPair found for visual: {enemyVisual.name}");
+            Debug.Log("EnemyVisualPair found. Deleting visual and UI...");
+
+            // Visual zerstören
             pair.DestroyVisual();
-            activeEnemy.Remove(pair);
+
+            // UI zerstören, falls vorhanden
+            if (pair.uiObject != null)
+            {
+                BattleUIController.Instance.RemoveEnemyUI(pair.uiObject);
+            }
+
+            // Aus Liste entfernen
+            activeEnemies.Remove(pair);
         }
         else
         {
-            Debug.LogWarning($"EnemyVisualPair not found for the given visual: {enemyVisual.name}");
-            Debug.Log($"ActiveEnemy count: {activeEnemy.Count}");
-            foreach (var active in activeEnemy)
-            {
-                Debug.Log($"ActiveEnemy: Enemy={active.enemy.Name}, Visual={active.visual.name}"); 
-                //debug erfindet ja das rixchtige aber wird nicht bisher richtige ge�ffnet
-                active.DestroyVisual();
-            }
+            Debug.LogWarning("EnemyVisualPair NOT found for: " + enemyVisual.name);
         }
     }
+
+    public EnemyVisualPair GetPairForEnemy(Enemy e)
+    {
+        return activeEnemies.Find(p => p.enemy == e);
+    }
+
+
 }

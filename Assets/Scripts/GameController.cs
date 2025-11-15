@@ -4,14 +4,31 @@ public class GameController : MonoBehaviour
 {
     public static GameController Instance { get; private set; }
 
+    [SerializeField]
+    MainUIController mainUIController;
+
+    [SerializeField]
     PathManager pathManager;
+
+    [SerializeField]
     SpawnManager spawnManager;
+
+    Player player;
+
+    int upgradePoints = 0;
 
     bool isPause = false;
     bool spawnsAktiv = true;
+
     public SpawnManager SpawnManager
         {get => spawnManager; }
-    public PathManager PathManager { get => pathManager; }
+    public PathManager PathManager 
+    { get => pathManager; }
+
+    public MainUIController MainUIController
+    {
+        get => mainUIController;
+    }
 
     public bool spawnActiv
     {
@@ -31,8 +48,7 @@ public class GameController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        pathManager = FindObjectOfType<PathManager>();
-
+        player = BattelControler.Instance.Player;
     }
 
     // Update is called once per frame
@@ -44,5 +60,30 @@ public class GameController : MonoBehaviour
     public void GameOver()
     {
         Debug.Log("Game Over!");
+    }
+
+    // Upgrade-Punkte hinzufügen
+    public void AddUpgradePoints(int amount)
+    {
+        upgradePoints += amount;
+        mainUIController.UpdateUpgradePoints(upgradePoints); // UI aktualisieren
+    }
+
+    // Upgrade-Punkte ausgeben
+    public bool SpendUpgradePoints(int amount)
+    {
+        if (upgradePoints >= amount)
+        {
+            upgradePoints -= amount;
+            mainUIController.UpdateUpgradePoints(upgradePoints); // UI aktualisieren
+            return true;
+        }
+        return false; // Nicht genug Punkte
+    }
+
+    // Aktuelle Upgrade-Punkte abfragen
+    public int GetUpgradePoints()
+    {
+        return upgradePoints;
     }
 }

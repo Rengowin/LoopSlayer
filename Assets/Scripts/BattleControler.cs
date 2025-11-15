@@ -1,5 +1,4 @@
-using NUnit.Framework;
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 
 public class BattelControler : MonoBehaviour
@@ -11,33 +10,17 @@ public class BattelControler : MonoBehaviour
     List<Enemy> enemys = new List<Enemy>();
     Spawn2DManager spawn2DManager;
 
-    public Player Player
-    {
-        get => player;
-    }
-    public BattelManger BattelManger
-    {
-        get => battelManger;
-    }
+    float tempMovementSpeed;
+    float tempHealSpeed;
 
-    public List<Enemy> Enemys
-    {
-        get => enemys;
-        set => enemys = value;
-    }
-
-    public Spawn2DManager Spawn2DManager
-    {
-        get => spawn2DManager;
-    }
-
-
-
-    float tempMovementSpeed, tempSpawnInterval;
+    public Player Player => player;
+    public BattelManger BattelManger => battelManger;
+    public List<Enemy> Enemys { get => enemys; set => enemys = value; }
+    public Spawn2DManager Spawn2DManager => spawn2DManager;
 
     private void Awake()
     {
-        if(Instance != null && Instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(this.gameObject);
             return;
@@ -45,38 +28,43 @@ public class BattelControler : MonoBehaviour
         Instance = this;
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         player = FindObjectOfType<Player>();
         battelManger = FindObjectOfType<BattelManger>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    // ------------------------------------------------------
+    // KAMPF STARTEN
+    // ------------------------------------------------------
     public void StartBattle()
     {
+        // Player einfrieren
         tempMovementSpeed = player.Speed;
+        tempHealSpeed = player.HealSpeed;
+
+        player.HealSpeed = 0;
         player.Speed = 0;
+
+        // Szene wechseln
         SceneToggleManager.Instance.LoadFightScene();
         GameController.Instance.spawnActiv = false;
+
+        // Gegnerliste an BattelManager übergeben
         battelManger.Enemies = enemys;
         battelManger.Player = player;
 
         battelManger.BattelActive = true;
-        
-
-
     }
 
+    // ------------------------------------------------------
+    // NACH SZENE-LADEN → Gegner + Player UI spawnen
+    // ------------------------------------------------------
     public void spawnEnemysAfterSecenLoad()
     {
         spawn2DManager = FindObjectOfType<Spawn2DManager>();
-        int enemyCount = (enemys == null) ? 0 : enemys.Count;
+
+        int enemyCount = enemys == null ? 0 : enemys.Count;
         Debug.Log($"spawnEnemysAfterSecenLoad: Spawn2DManager found={(spawn2DManager != null)}, enemysCount={enemyCount}");
 
         if (spawn2DManager == null)
@@ -87,50 +75,66 @@ public class BattelControler : MonoBehaviour
 
         if (enemys == null || enemys.Count == 0)
         {
-            Debug.LogWarning("spawnEnemysAfterSecenLoad: Keine Gegner in der Liste (enemys). Nichts zum Spawnen.");
+            Debug.LogWarning("spawnEnemysAfterSecenLoad: Keine Gegner vorhanden.");
             return;
         }
 
+        // Gegner + Enemy UI erstellen
         spawn2DManager.SpawnEnemy(enemys);
+
+        // Player UI erstellen
+        BattleUIController.Instance.CreatePlayerUI(player);
     }
 
+    // ------------------------------------------------------
+    // KAMPF BEENDEN
+    // ------------------------------------------------------
     public void EndBattle()
     {
+        // Player Movement + Heal wieder aktivieren
         player.Speed = tempMovementSpeed;
+        player.HealSpeed = tempHealSpeed;
+
         GameController.Instance.spawnActiv = true;
+
+        // UI entfernen
+        if (BattleUIController.Instance != null)
+            BattleUIController.Instance.RemovePlayerUI();
 
         enemys?.Clear();
 
         SceneToggleManager.Instance.UnloadFightScene();
     }
 
+    // ------------------------------------------------------
+    // Gegner hinzufügen
+    // ------------------------------------------------------
     public void AddEnemy(List<Enemy> newEnemys)
     {
         foreach (Enemy enemy in newEnemys)
-        {
             enemys.Add(enemy);
-        }
     }
 
+    // ------------------------------------------------------
+    // Gegner entfernen (durch Tod)
+    // ------------------------------------------------------
     public void RemoveEnemy(Enemy enemy)
     {
-        // Entferne den Gegner aus der Battle-Liste
         enemys.Remove(enemy);
 
-        // Informiere den Spawn2DManager, dass der Gegner entfernt wurde
         if (spawn2DManager != null)
         {
-            spawn2DManager.EnemieDied(enemy.gameObject); // �bergibt das GameObject der Enemy-Instanz
-        }
-        else
-        {
-            Debug.LogWarning("Spawn2DManager ist null. Enemy konnte nicht aus der Visual-Liste entfernt werden.");
+            // VISUAL entfernen über EnemyVisualPair
+            EnemyVisualPair pair = spawn2DManager.GetPairForEnemy(enemy);
+
+            if (pair != null)
+                spawn2DManager.EnemieDied(pair.visual);
+            else
+                Debug.LogWarning("RemoveEnemy(): Kein Visual-Pair gefunden.");
         }
 
-        // Beende den Kampf, wenn keine Gegner mehr �brig sind
+        // wenn keine Gegner mehr → Kampf beenden
         if (enemys.Count == 0)
-        {
             EndBattle();
-        }
     }
 }

@@ -9,18 +9,15 @@ public class BuffClass
     float buffAmount;
 
     [SerializeField]
-    bool buffAktive, playerOnly, enemyOnly, both;
+    bool multiply, addtive;
 
     [SerializeField]
-    bool multiply;
+    int upgradeCost;
 
-    public string BuffName() => buffName;
-    public float BuffAmount() => buffAmount;
-    public bool BuffAktive() => buffAktive;
-    public bool PlayerOnly() => playerOnly;
-    public bool EnemyOnly() => enemyOnly;
-    public bool Both() => both;
-    public bool Multiply() => multiply;
-
+    public string BuffName { get => buffName; }
+    public float BuffAmount { get => buffAmount; }
+    public bool BuffAddtive { get => addtive; }
+    public bool Multiply { get => multiply; }
+    public int UpgradeCost { get => upgradeCost; }
 
 }

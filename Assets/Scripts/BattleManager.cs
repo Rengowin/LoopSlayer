@@ -54,14 +54,14 @@ public class BattelManger : MonoBehaviour
             {
                 battelActive = false;
                 BattelControler.Instance.EndBattle();
-                Debug.Log("Player HP nach dem fight ist: " + player.HP);
+                Debug.Log("Player HP nach dem fight ist: " + player.currentHP);
             }
         }
     }
 
     public void EnemyAction(Enemy enemy)
     {
-        player.HP -= enemy.DMG;
+        player.currentHP -= enemy.DMG;
         Debug.Log("Der Spieler hat: " + enemy.DMG + "dmg bekommen");
     }
 

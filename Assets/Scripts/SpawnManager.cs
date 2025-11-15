@@ -10,6 +10,9 @@ public class SpawnManager : MonoBehaviour
 
     List<EnemySpawnData> possibleSpawns = new List<EnemySpawnData>();
 
+    [SerializeField]
+    GameObject enemyContainer;
+
     int anzDerLoops;
 
     private float timer = 0f;
@@ -35,24 +38,40 @@ public class SpawnManager : MonoBehaviour
     private void SpawnEnemy()
     {
         anzDerLoops = GameController.Instance.PathManager.StartPath.TimesLooped;
-        {
-            lookForPossibleSpawns();
 
-            foreach (Path possiblePaths in GameController.Instance.PathManager.Paths)
+        // Liste der möglichen Gegner aktualisieren
+        lookForPossibleSpawns();
+
+        foreach (Path possiblePaths in GameController.Instance.PathManager.Paths)
+        {
+            EnemySpawnData chosenEnemy = ChooseWeigtedEnemy();
+            if (chosenEnemy == null || chosenEnemy.EnemyPrefab1() == null)
             {
-                EnemySpawnData chosenEnemy = ChooseWeigtedEnemy();
-                if (chosenEnemy.EnemyPrefab1() == null)
+                Debug.Log("No Enemy spawned");
+                return;
+            }
+
+            if (possiblePaths.canSpawn())
+            {
+                // Gegner-Objekt erzeugen
+                GameObject enemyObject = Instantiate(chosenEnemy.EnemyPrefab1(), possiblePaths.GetSpawnPoint(), Quaternion.identity);
+
+                // Gegner-Objekt in den enemyContainer verschieben
+                if (enemyContainer != null)
                 {
-                    Debug.Log("No Enemy spawend");
-                    return;
+                    enemyObject.transform.SetParent(enemyContainer.transform);
                 }
-                if (possiblePaths.canSpawn() == true)
+                else
                 {
-                    GameObject enemyObject = Instantiate(chosenEnemy.EnemyPrefab1(), possiblePaths.GetSpawnPoint(), Quaternion.identity);
-                    Enemy enemy = enemyObject.GetComponent<Enemy>();
-                    enemy.Init(chosenEnemy, anzDerLoops);
-                    possiblePaths.AddEnemyToPath(enemy);
+                    Debug.LogWarning("EnemyContainer ist nicht zugewiesen. Gegner wird direkt in der Szene platziert.");
                 }
+
+                // Gegner initialisieren
+                Enemy enemy = enemyObject.GetComponent<Enemy>();
+                enemy.Init(chosenEnemy, anzDerLoops);
+
+                // Gegner dem Pfad hinzufügen
+                possiblePaths.AddEnemyToPath(enemy);
             }
         }
     }
