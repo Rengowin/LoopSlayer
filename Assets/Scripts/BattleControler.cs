@@ -51,7 +51,6 @@ public class BattelControler : MonoBehaviour
         tempMovementSpeed = player.Speed;
 
         //HealSpeed should be false that the player can't heal during battle
-        player.HealAktive = false;
         player.Speed = 0;
 
         // UI auf Kampfmodus
@@ -103,7 +102,6 @@ public class BattelControler : MonoBehaviour
     {
         // Player zurücksetzen
         player.Speed = tempMovementSpeed;
-        player.HealAktive = true;
 
         // Spawning wieder aktivieren
         GameController.Instance.spawnActiv = true;

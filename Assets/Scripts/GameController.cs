@@ -1,4 +1,7 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Collections;
+using System;
 
 public class GameController : MonoBehaviour
 {
@@ -76,21 +79,38 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        // Timer prüfen und Szene wechseln
+        if (gameOverTimer > 0)
+        {
+            gameOverTimer -= Time.deltaTime; // Zeit reduzieren
+            Debug.Log($"Timer: {gameOverTimer}"); // Timer-Wert ausgeben
+            if (gameOverTimer <= 0)
+            {
+                Debug.Log("Lade MenuScene...");
+                SceneManager.LoadScene("MenuScene"); // Szene laden
+            }
+        }
     }
+
+    private float gameOverTimer = -1f; // Timer für die Verzögerung
 
     public void GameOver()
     {
-
         HighscoreManager.Instance.AddScore(score);
         gameOverPanel.SetActive(true);
         Debug.Log("Game Over!");
-    
 
+        // Szene nach 3 Sekunden laden
+        Invoke("LoadMenuScene", 3f);
     }
 
-// Upgrade-Punkte hinzufügen
-public void AddUpgradePoints(int amount)
+    private void LoadMenuScene()
+    {
+        SceneManager.LoadScene("MenuScene");
+    }
+
+    // Upgrade-Punkte hinzufügen
+    public void AddUpgradePoints(int amount)
     {
         upgradePoints += amount;
         mainUIController.UpdateUpgradePoints(upgradePoints); // UI aktualisieren

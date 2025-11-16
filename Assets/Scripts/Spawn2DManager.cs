@@ -58,6 +58,8 @@ public class Spawn2DManager : MonoBehaviour
                 return enemyPrefabs[0];
             case "Bat":
                 return enemyPrefabs[1];
+            case "Rock":
+                return enemyPrefabs[2];
             default:
                 return null;
         }

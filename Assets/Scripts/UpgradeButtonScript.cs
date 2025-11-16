@@ -31,6 +31,7 @@ public class UpgradeButtonScript : MonoBehaviour
 
     public void Init(BuffClass buffInfo, UpgradeManager manager, UpgradeController controller)
     {
+        Debug.Log($"Init aufgerufen: BuffName = {buffInfo.BuffName}, BuffAmount = {buffInfo.BuffAmount}");
         buffClass = buffInfo;
         upgradeManager = manager;
         upgradeController = controller;

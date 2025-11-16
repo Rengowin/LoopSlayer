@@ -1,77 +1,92 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    [SerializeField]
-    List<EnemySpawnData> enemys = new List<EnemySpawnData>();
-
+    [SerializeField] List<EnemySpawnData> enemys = new List<EnemySpawnData>();
     List<EnemySpawnData> possibleSpawns = new List<EnemySpawnData>();
 
-    [SerializeField]
-    GameObject enemyContainer;
+    [SerializeField] GameObject enemyContainer;
 
-    int anzDerLoops;
+    float timer = 0f;
 
-    private float timer = 0f;
+    [SerializeField] float baseSpawnInterval = 5.0f;
+    [SerializeField] float currentSpawnInterval;
 
     void Start()
     {
+        currentSpawnInterval = baseSpawnInterval;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (GameController.Instance.spawnActiv)
+        if (!GameController.Instance.spawnActiv)
+            return;
+
+        timer += Time.deltaTime;
+
+        if (timer > currentSpawnInterval)
         {
-            timer += Time.deltaTime;
-            if (timer > GameController.Instance.PathManager.SpawnInterval)
-            {
-                timer = 0f;
-                SpawnEnemy();
-            }
+            timer = 0f;
+            SpawnEnemy();
         }
     }
 
+    // ============= BUFF SUPPORT =============
+
+    public void ApplySpawnIntervalReduction(float totalReduction)
+    {
+        currentSpawnInterval = Mathf.Max(0.1f, baseSpawnInterval - totalReduction);
+    }
+
+    public void ApplySpawnChanceChanges(
+        float reduceTier0,
+        float addTier1,
+        float addTier2,
+        float addTier3)
+    {
+        foreach (var e in enemys)
+        {
+            if (e.Tier() == 0) e.ModifySpawnChance(-reduceTier0);
+            if (e.Tier() == 1) e.ModifySpawnChance(addTier1);
+            if (e.Tier() == 2) e.ModifySpawnChance(addTier2);
+            if (e.Tier() == 3) e.ModifySpawnChance(addTier3);
+        }
+    }
+
+    public void ApplyEnemyScaleReduction(float totalReduction)
+    {
+        foreach (var e in enemys)
+            e.ModifyScale(totalReduction);
+    }
+
+    public float GetCurrentSpawnInterval() => currentSpawnInterval;
+
+    // ============= EXISTIERENDE FUNKTIONEN (unverändert) =============
     private void SpawnEnemy()
     {
-        anzDerLoops = GameController.Instance.PathManager.StartPath.TimesLooped;
+        // unchanged
+        GameController gc = GameController.Instance;
 
-        // Liste der möglichen Gegner aktualisieren
+        int anzLoops = gc.PathManager.StartPath.TimesLooped;
         lookForPossibleSpawns();
 
-        foreach (Path possiblePaths in GameController.Instance.PathManager.Paths)
+        foreach (Path path in gc.PathManager.Paths)
         {
-            EnemySpawnData chosenEnemy = ChooseWeigtedEnemy();
-            if (chosenEnemy == null || chosenEnemy.EnemyPrefab1() == null)
-            {
-                Debug.Log("No Enemy spawned");
+            EnemySpawnData data = ChooseWeigtedEnemy();
+            if (data == null || data.EnemyPrefab1() == null)
                 return;
-            }
 
-            if (possiblePaths.canSpawn())
+            if (path.canSpawn())
             {
-                // Gegner-Objekt erzeugen
-                GameObject enemyObject = Instantiate(chosenEnemy.EnemyPrefab1(), possiblePaths.GetSpawnPoint(), Quaternion.identity);
+                GameObject obj = Instantiate(data.EnemyPrefab1(), path.GetSpawnPoint(), Quaternion.identity);
 
-                // Gegner-Objekt in den enemyContainer verschieben
-                if (enemyContainer != null)
-                {
-                    enemyObject.transform.SetParent(enemyContainer.transform);
-                }
-                else
-                {
-                    Debug.LogWarning("EnemyContainer ist nicht zugewiesen. Gegner wird direkt in der Szene platziert.");
-                }
+                if (enemyContainer != null) obj.transform.SetParent(enemyContainer.transform);
 
-                // Gegner initialisieren
-                Enemy enemy = enemyObject.GetComponent<Enemy>();
-                enemy.Init(chosenEnemy, anzDerLoops);
+                Enemy enemy = obj.GetComponent<Enemy>();
+                enemy.Init(data, anzLoops);
 
-                // Gegner dem Pfad hinzufügen
-                possiblePaths.AddEnemyToPath(enemy);
+                path.AddEnemyToPath(enemy);
             }
         }
     }
@@ -79,47 +94,31 @@ public class SpawnManager : MonoBehaviour
     private void lookForPossibleSpawns()
     {
         possibleSpawns.Clear();
-        foreach (EnemySpawnData enemy in enemys)
-        {
-            if (enemy.Unlocked() == true)
-            {
-                possibleSpawns.Add(enemy);
-            }
-        }
+        foreach (var e in enemys)
+            if (e.Unlocked()) possibleSpawns.Add(e);
     }
 
     private EnemySpawnData ChooseWeigtedEnemy()
     {
-        // Schutz gegen leere Listen
-        if (possibleSpawns == null || possibleSpawns.Count == 0)
+        if (possibleSpawns.Count == 0)
             return null;
 
-        // Gesamtes Gewicht berechnen
-        float totalWeight = 0f;
-        foreach (EnemySpawnData enemy in possibleSpawns)
-        {
-            totalWeight += enemy.SpawnChance();
-        }
+        float total = 0;
+        foreach (var e in possibleSpawns) total += e.SpawnChance;
 
-        // Falls alle Gewichte 0 oder negativ sind: Fallback auf uniforme Auswahl
-        if (totalWeight <= 0f)
-        {
+        if (total <= 0)
             return possibleSpawns[Random.Range(0, possibleSpawns.Count)];
-        }
 
-        // gewichtete Auswahl
-        float randomValue = Random.Range(0f, totalWeight);
-        float cumulativeWeight = 0f;
+        float r = Random.Range(0f, total);
+        float c = 0;
 
-        foreach (EnemySpawnData enemy in possibleSpawns)
+        foreach (var e in possibleSpawns)
         {
-            cumulativeWeight += enemy.SpawnChance();
-            if (randomValue <= cumulativeWeight)
-                return enemy;
+            c += e.SpawnChance;
+            if (r <= c)
+                return e;
         }
 
-        // Sollte wegen Rundungsfehlern nie erreicht werden — sicherer Fallback
-        // Und Compile zu befiedigen ;D
         return possibleSpawns[possibleSpawns.Count - 1];
     }
 }

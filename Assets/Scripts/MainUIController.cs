@@ -45,6 +45,7 @@ public class MainUIController : MonoBehaviour
     bool toogleToPause = false;
     bool toogleToDefeat = false;
     bool battleStartet = false;
+    bool isPaused = false;
 
     //getters and setters
 
@@ -109,28 +110,20 @@ public class MainUIController : MonoBehaviour
     // Pause-Menü ein-/ausblenden
     void TogglePauseMenu()
     {
-        GameController.Instance.spawnActiv = !GameController.Instance.spawnActiv;
 
-        if (GameController.Instance.spawnActiv)
+        if (!isPaused)
         {
-            // Pause beenden: Ursprüngliche Geschwindigkeit wiederherstellen
-            BattelControler.Instance.Player.Speed = tempPlayerSpeed;
-            BattelControler.Instance.Player.HealAktive = true;
+            isPaused = true;
+            Time.timeScale = 0f;
         }
         else
-
-    {
-	         
-	}
         {
-            // Pause aktivieren: Geschwindigkeit speichern und auf 0 setzen
-            tempPlayerSpeed = BattelControler.Instance.Player.Speed;
-            BattelControler.Instance.Player.Speed = 0;
-            BattelControler.Instance.Player.HealAktive = false;
+           isPaused = false;
+            Time.timeScale = 1f;
         }
-
         bool isActive = pauseMenuPanel.activeSelf;
         pauseMenuPanel.SetActive(!isActive); // Zustand umkehren
+
     }
 
     public void UpdateUpgradePoints(int upgradePoints)

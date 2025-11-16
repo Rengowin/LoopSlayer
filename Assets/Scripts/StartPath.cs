@@ -21,5 +21,6 @@ public class StartPath : MonoBehaviour
     {
         timesLooped++;
         Debug.Log("Anzahl der durchläufe: " + timesLooped);
+        BattelControler.Instance.Player.Heal();
     }
 }

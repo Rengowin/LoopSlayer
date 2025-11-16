@@ -1,120 +1,214 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-
-// this shoulod create all upgrade buttons and manage them/give the informations to the UpgradeController
 public class UpgradeManager : MonoBehaviour
 {
-    [SerializeField]
-    UpgradeController upgradeController;
+    public static UpgradeManager Instance;
+    [Header("Upgrade Pool")]
+    [SerializeField] List<BuffClass> PossibleUpgrades = new List<BuffClass>();
 
-    [SerializeField]
-    List<BuffClass> buffClasses = new List<BuffClass>();
+    [Header("Max Upgrade Counts")]
+    [SerializeField] int maxATKSpeedUpgrades;
+    [SerializeField] int maxATKCountUpgrades;
 
-    [SerializeField]
-    GameObject upgradeButtonPrefab;
+    [Header("Enemy/Spawn Caps (Inspector gesteuert)")]
+    [SerializeField] float maxEnemyScaleReduction;
+    [SerializeField] float maxSpawnIntervalReduction;
 
-    [SerializeField]
-    GameObject upgradeButtonContainer;
+    int currentATKSpeedUpgrades = 0;
+    int currentATKCountUpgrades = 0;
 
-    List<UpgradeButtonScript> upgradeButtons = new List<UpgradeButtonScript>();
-
-    
-    //additive buffs
+    // ===== BUFF LISTEN =====
     List<float> HPBuffAddition = new List<float>();
-    List<float> DMGBuffAddition = new List<float>();
-    List<float> ATKSpeeedAddition = new List<float>();
-
-
-    //multiplicative buffs
     List<float> HPBuffMultiy = new List<float>();
+
+    List<float> DMGBuffAddition = new List<float>();
     List<float> DMGBuffMultiy = new List<float>();
-    List<float> ATKSpeeedMultiy = new List<float>();
 
-    float totalHPBuff, totalDMGBuff, totalAKTSpeedBuff;
+    List<float> HealAmountAddition = new List<float>();
+    List<float> HealAmountMultiy = new List<float>();
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    List<float> MovementSpeedAddition = new List<float>();
+
+    List<float> ATKSpeedAddition = new List<float>();
+    List<float> ATKCountAddition = new List<float>();
+
+    // ===== SPAWN CHANCE =====
+    List<float> SpawnChanceReductionPrefab0 = new List<float>();
+    List<float> SpawnChanceAdditionPrefab1 = new List<float>();
+    List<float> SpawnChanceAdditionPrefab2 = new List<float>();
+    List<float> SpawnChanceAdditionPrefab3 = new List<float>();
+
+    // ===== SPAWN INTERVAL =====
+    List<float> SpawnIntervalReduction = new List<float>();
+
+    // ===== ENEMY SCALE (nur Reduce!) =====
+    List<float> EnemyScaleReduction = new List<float>();
+
+    // ===== TOTAL =====
+    float totalHPBuff = 0;
+    float totalDMGBuff = 0;
+    float totalHealAmountBuff = 0;
+    float totalMovementSpeedBuff = 0;
+    float totalATKSpeedBuff = 0;
+    float totalATKCountBuff = 0;
+
+    void Awake()
     {
-        foreach (BuffClass buff in buffClasses)
-        {
-            createBuffButtons(buff);
-        }
+        Instance = this;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void createBuffButtons(BuffClass buffInfo)
-    {
-        GameObject obj = Instantiate(upgradeButtonPrefab);
-        obj.transform.SetParent(upgradeButtonContainer.transform, false);
-
-        var script = obj.GetComponent<UpgradeButtonScript>();
-        script.Init(buffInfo, this, upgradeController);
-    }
-    public void applyBuff(BuffClass buff)
-    {
-        addToListX(buff.BuffName + (buff.BuffAddtive ? " Addition" : " Multiy"), buff.BuffAmount);
-
-        //calculate total buffs
-        totalHPBuff = 0;
-        foreach (float buffAmount in HPBuffAddition)
-        {
-            totalHPBuff += buffAmount;
-        }
-        foreach (float buffAmount in HPBuffMultiy)
-        {
-            totalHPBuff *= buffAmount;
-        }
-        totalDMGBuff = 0;
-        foreach (float buffAmount in DMGBuffAddition)
-        {
-            totalDMGBuff += buffAmount;
-        }
-        foreach (float buffAmount in DMGBuffMultiy)
-        {
-            totalDMGBuff *= buffAmount;
-        }
-        totalAKTSpeedBuff = 0;
-        foreach (float buffAmount in ATKSpeeedAddition)
-        {
-            totalAKTSpeedBuff += buffAmount;
-        }
-        foreach (float buffAmount in ATKSpeeedMultiy)
-        {
-            totalAKTSpeedBuff *= buffAmount;
-        }
-
-        BattelControler.Instance.Player.addBuff(totalHPBuff, totalDMGBuff, totalAKTSpeedBuff);
-    }
-
+    // =======================================================================
+    //  ADD TO LIST (BUFF NAME MATCHING)
+    // =======================================================================
     public void addToListX(string ListName, float buffAmount)
     {
+        Debug.Log($"addToListX → {ListName} | {buffAmount}");
+
         switch (ListName)
         {
-            case "HP Buff Addition":
+            // ===== PLAYER =====
+            case "HP Addition":
                 HPBuffAddition.Add(buffAmount);
                 break;
-            case "DMG Buff Addition":
+
+            case "DMG Addition":
                 DMGBuffAddition.Add(buffAmount);
                 break;
-            case "AKT Speed Buff Addition":
-                ATKSpeeedAddition.Add(buffAmount);
+
+            case "HealAmount Addition":
+                HealAmountAddition.Add(buffAmount);
                 break;
-            case "HP Buff Multiy":
-                HPBuffMultiy.Add(buffAmount);
+
+            case "MovementSpeed Addition":
+                MovementSpeedAddition.Add(buffAmount);
                 break;
-            case "DMG Buff Multiy":
-                DMGBuffMultiy.Add(buffAmount);
+
+            case "ATKSpeed Addition":
+                if (currentATKSpeedUpgrades < maxATKSpeedUpgrades)
+                {
+                    ATKSpeedAddition.Add(buffAmount);
+                    currentATKSpeedUpgrades++;
+                }
                 break;
-            case "AKT Speed Buff Multiy":
-                ATKSpeeedMultiy.Add(buffAmount);
+
+            case "ATKCount Addition":
+                if (currentATKCountUpgrades < maxATKCountUpgrades)
+                {
+                    ATKCountAddition.Add(buffAmount);
+                    currentATKCountUpgrades++;
+                }
+                break;
+
+
+            // ===== SPAWN CHANCE =====
+            case "SpawnChance Reduction Prefab0 Addition":
+                SpawnChanceReductionPrefab0.Add(buffAmount);
+                break;
+
+            case "SpawnChance Prefab1 Addition":
+                SpawnChanceAdditionPrefab1.Add(buffAmount);
+                break;
+
+            case "SpawnChance Prefab2 Addition":
+                SpawnChanceAdditionPrefab2.Add(buffAmount);
+                break;
+
+            case "SpawnChance Prefab3 Addition":
+                SpawnChanceAdditionPrefab3.Add(buffAmount);
+                break;
+
+
+            // ===== SPAWN INTERVAL =====
+            case "SpawnInterval Reduction Addition":
+                SpawnIntervalReduction.Add(buffAmount);
+                break;
+
+
+            // ===== ENEMY SCALE (nur Reduce) =====
+            case "EnemyScaleReduce Addition":
+                EnemyScaleReduction.Add(buffAmount);
+                break;
+
+
+            // ===== ERROR =====
+            default:
+                Debug.LogError($"Unknown buff list: {ListName}");
                 break;
         }
     }
 
+    // =======================================================================
+    //  APPLY BUFF
+    // =======================================================================
+    public void applyBuff(BuffClass buff)
+    {
+        // Buff String erweitern
+        string key = buff.BuffName + (buff.BuffAddtive ? " Addition" : " Multiy");
+        addToListX(key, buff.BuffAmount);
+
+        // ----- PLAYER BUFFS -----
+        totalHPBuff = CalculateTotalBuff(HPBuffAddition, HPBuffMultiy);
+        totalDMGBuff = CalculateTotalBuff(DMGBuffAddition, DMGBuffMultiy);
+        totalHealAmountBuff = CalculateTotalBuff(HealAmountAddition, HealAmountMultiy);
+        totalMovementSpeedBuff = CalculateTotalBuff(MovementSpeedAddition, null);
+        totalATKSpeedBuff = CalculateTotalBuff(ATKSpeedAddition, null);
+        totalATKCountBuff = CalculateTotalBuff(ATKCountAddition, null);
+
+        if (BattelControler.Instance?.Player != null)
+        {
+            BattelControler.Instance.Player.ApplyBuffs(
+                totalHPBuff,
+                totalDMGBuff,
+                totalATKSpeedBuff,
+                totalHealAmountBuff,
+                totalMovementSpeedBuff,
+                (int)totalATKCountBuff
+            );
+        }
+
+        // ===== SPAWN INTERVAL =====
+        float spawnIntervalReduction = SumList(SpawnIntervalReduction);
+        spawnIntervalReduction = Mathf.Min(spawnIntervalReduction, maxSpawnIntervalReduction);
+
+        GameController.Instance.SpawnManager.ApplySpawnIntervalReduction(spawnIntervalReduction);
+
+        // ===== ENEMY SCALE (REDUCE) =====
+        float scaleReduction = SumList(EnemyScaleReduction);
+        scaleReduction = Mathf.Min(scaleReduction, maxEnemyScaleReduction);
+
+        GameController.Instance.SpawnManager.ApplyEnemyScaleReduction(scaleReduction);
+
+        // ===== SPAWN CHANCE =====
+        float t0 = SumList(SpawnChanceReductionPrefab0);
+        float t1 = SumList(SpawnChanceAdditionPrefab1);
+        float t2 = SumList(SpawnChanceAdditionPrefab2);
+        float t3 = SumList(SpawnChanceAdditionPrefab3);
+
+        GameController.Instance.SpawnManager.ApplySpawnChanceChanges(t0, t1, t2, t3);
+    }
+
+    // =======================================================================
+    //  HELPERS
+    // =======================================================================
+
+    float CalculateTotalBuff(List<float> addList, List<float> multiList)
+    {
+        float add = SumList(addList);
+        float multi = 1f;
+
+        if (multiList != null)
+        {
+            foreach (var m in multiList) multi *= (1f + m);
+        }
+
+        return add * multi;
+    }
+
+    float SumList(List<float> list)
+    {
+        float sum = 0;
+        foreach (var v in list) sum += v;
+        return sum;
+    }
 }

@@ -1,30 +1,27 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField]
-    float hp;
-    [SerializeField]
-    float dmg;
-    [SerializeField]
-    float speed;
-    [SerializeField]
-    float aktSpeed;
-    [SerializeField]
-    int atkCount;
-    [SerializeField]
-    int maxHP;
-    [SerializeField]
-    float healAmount;
-    [SerializeField]
-    float healSpeed;
+    [SerializeField] float hp;
+    [SerializeField] float dmg;
+    [SerializeField] float speed;
+    [SerializeField] float aktSpeed;
+    [SerializeField] int atkCount;
+    [SerializeField] int maxHP;
+    [SerializeField] float healAmount;
+    [SerializeField] float healSpeed;
 
     float currentActionTimer;
 
-    float totalHPBuff, totalDMGBuff, totalAKTSpeedBuff;
+    // === Base Werte für Buff-System ===
+    float baseMaxHP;
+    float baseDMG;
+    float baseSpeed;
+    float baseATKSpeed;
+    int baseATKCount;
+    float baseHealAmount;
 
-    bool healAktive = true;
-
+    // === Properties (UNVERÄNDERT) ===
     public float currentHP
     {
         get => hp;
@@ -32,6 +29,7 @@ public class Player : MonoBehaviour
         {
             hp = value;
             GameController.Instance.MainUIController.PlayerHP = hp;
+
             if (hp <= 0)
             {
                 GameController.Instance.GameOver();
@@ -39,12 +37,6 @@ public class Player : MonoBehaviour
                 Debug.Log("Player is dead.");
             }
         }
-    }
-
-    public bool HealAktive
-    {
-        get => healAktive;
-        set => healAktive = value;
     }
 
     public int MaxHPValue
@@ -55,35 +47,51 @@ public class Player : MonoBehaviour
 
     public float Dmg
     {
-        get => dmg; set => dmg = value;
+        get => dmg;
+        set => dmg = value;
     }
 
     public float Speed
     {
-        get => speed; set => speed = value;
+        get => speed;
+        set => speed = value;
     }
+
     public float AKTSpeed
     {
-        get => aktSpeed; set => aktSpeed = value;
+        get => aktSpeed;
+        set => aktSpeed = value;
     }
+
     public int ATKCount
     {
-        get => atkCount; set => atkCount = value;
+        get => atkCount;
+        set => atkCount = value;
     }
 
     public float HealAmount
     {
-        get => healAmount; set => healAmount = value;
-    }
-    public float HealSpeed
-    {
-        get => healSpeed; set => healSpeed = value;
+        get => healAmount;
+        set => healAmount = value;
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public float HealSpeed
+    {
+        get => healSpeed;
+        set => healSpeed = value;
+    }
+
     void Start()
     {
         currentActionTimer = aktSpeed;
+
+        // ==== Base Werte speichern ====
+        baseMaxHP = maxHP;
+        baseDMG = dmg;
+        baseSpeed = speed;
+        baseATKSpeed = aktSpeed;
+        baseATKCount = atkCount;
+        baseHealAmount = healAmount;
     }
 
     public void UpdateActionTimer(float deltatime)
@@ -95,44 +103,49 @@ public class Player : MonoBehaviour
     {
         return currentActionTimer <= 0;
     }
+
     public void ResetActionTimer()
     {
         currentActionTimer = aktSpeed;
     }
 
-    
-    // Update is called once per frame
-    void Update()
+    // ============================================================
+    //                BUFF-UPDATE (keine Doppel-Additionen)
+    // ============================================================
+    public void ApplyBuffs(
+        float hpBuff,
+        float dmgBuff,
+        float atkSpeedBuff,
+        float healBuff,
+        float movementBuff,
+        int atkCountBuff)
     {
-        
+        // HP
+        maxHP = (int)(baseMaxHP + hpBuff);
+
+        if (currentHP > maxHP)
+            currentHP = maxHP;
+
+        // Damage
+        dmg = baseDMG + dmgBuff;
+
+        // Movement
+        speed = baseSpeed + movementBuff;
+
+        // ATK Speed (Buff = schneller → aktSpeed wird kleiner)
+        aktSpeed = Mathf.Max(0.1f, baseATKSpeed - atkSpeedBuff);
+
+        // ATK Count
+        atkCount = baseATKCount + atkCountBuff;
+
+        // Heal amount
+        healAmount = baseHealAmount + healBuff;
+
+        Debug.Log($"[Player Buffs] HP:{maxHP} DMG:{dmg} SPD:{speed} ATKSPD:{aktSpeed} COUNT:{atkCount}");
     }
 
-    public void addBuff(float hpBuff, float dmgBuff, float atkSpeedBuff)
+    public void Heal()
     {
-        if (totalHPBuff != hpBuff || totalDMGBuff != dmgBuff || totalAKTSpeedBuff != atkSpeedBuff)
-        {
-            if (totalHPBuff != hpBuff)
-            {
-                totalHPBuff = hpBuff;
-                maxHP = (int)(maxHP + totalHPBuff);
-                currentHP += hpBuff;
-            }
-
-            if (totalDMGBuff != dmgBuff)
-            {
-                totalDMGBuff = dmgBuff;
-                dmg += totalDMGBuff;
-            }
-
-            if (totalAKTSpeedBuff != atkSpeedBuff)
-            {
-                totalAKTSpeedBuff = atkSpeedBuff;
-                aktSpeed -= totalAKTSpeedBuff;
-                if (aktSpeed < 0.1f)
-                {
-                    aktSpeed = 0.1f;
-                }
-            }
-        }
+        hp = Mathf.Min(hp + healAmount, maxHP);
     }
 }

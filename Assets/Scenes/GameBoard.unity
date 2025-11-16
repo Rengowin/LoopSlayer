@@ -784,9 +784,9 @@ RectTransform:
   m_Father: {fileID: 1533420198}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -17, y: 20}
+  m_SizeDelta: {x: 0, y: 20}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &110024733
 MonoBehaviour:
@@ -1858,10 +1858,6 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 7062189676662225258, guid: 575a3654d3941334387fc213195182b8, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7931612847551622239, guid: 575a3654d3941334387fc213195182b8, type: 3}
       propertyPath: m_Name
       value: flied_pathStart
@@ -1907,7 +1903,7 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 7062189676662225258, guid: 575a3654d3941334387fc213195182b8, type: 3}
+    - {fileID: 0}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -5143,7 +5139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!82 &788817149
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5155,7 +5151,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: b79a986d236e9f542ad6e184a15d252b, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -6963,9 +6959,9 @@ RectTransform:
   m_Father: {fileID: 1533420198}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -17, y: -17}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1033804709
 MonoBehaviour:
@@ -7719,7 +7715,7 @@ RectTransform:
   m_Father: {fileID: 741575400}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -8959,6 +8955,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HighscoreMenuUI
   scoreText: {fileID: 198658356}
+  maxEntries: 15
 --- !u!1001 &1295374154
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10476,8 +10473,8 @@ MonoBehaviour:
   mainUIController: {fileID: 1412876317}
   pathManager: {fileID: 20922279}
   spawnManager: {fileID: 2051802947}
-  highscoreManager: {fileID: 0}
-  gameOverPanel: {fileID: 0}
+  highscoreManager: {fileID: 783494333}
+  gameOverPanel: {fileID: 1373171809}
 --- !u!1001 &1496551611
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12080,13 +12077,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaa564f508a94a54d9fb4320308598e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
-  hp: 100
-  dmg: 33
+  hp: 50
+  dmg: 50
   speed: 1
-  aktSpeed: 4
+  aktSpeed: 0.5
   atkCount: 1
-  maxHP: 100
-  healAmount: 0
+  maxHP: 50
+  healAmount: 10
   healSpeed: 0
 --- !u!1 &1723681333
 GameObject:
@@ -13865,7 +13862,7 @@ MonoBehaviour:
   - EnemyPrefab: {fileID: 0}
     enemyName: Nothing
     tier: 0
-    spawnChance: 0.7
+    spawnChance: 0.8
     unlocked: 1
     baseHealth: 0
     baseDamage: 0
@@ -13874,19 +13871,44 @@ MonoBehaviour:
     baseDropChance: 0
     upgradePointsOnKill: 0
     scoreOneKill: 0
-  - EnemyPrefab: {fileID: 7418679056324927084, guid: d8e7c73423b568f4ca26b0e9db7cba8a, type: 3}
+  - EnemyPrefab: {fileID: 3266613707001950321, guid: d8e7c73423b568f4ca26b0e9db7cba8a, type: 3}
     enemyName: Slime
+    tier: 0
+    spawnChance: 0.6
+    unlocked: 1
+    baseHealth: 20
+    baseDamage: 2
+    baseAktSpeed: 5
+    scalePerLoop: 1.15
+    baseDropChance: 1
+    upgradePointsOnKill: 1
+    scoreOneKill: 100
+  - EnemyPrefab: {fileID: 3104077657696033756, guid: 12978a12e6737dd4193e985d8bbcb77a, type: 3}
+    enemyName: Bat
     tier: 0
     spawnChance: 0.4
     unlocked: 1
-    baseHealth: 99
-    baseDamage: 1
-    baseAktSpeed: 5
-    scalePerLoop: 1
-    baseDropChance: 20
+    baseHealth: 30
+    baseDamage: 2
+    baseAktSpeed: 2
+    scalePerLoop: 1.15
+    baseDropChance: 1
     upgradePointsOnKill: 1
-    scoreOneKill: 100
+    scoreOneKill: 250
+  - EnemyPrefab: {fileID: 3770074106873277189, guid: 0bab0498a11725f42ab0db44c1c381af, type: 3}
+    enemyName: Rock
+    tier: 0
+    spawnChance: 0.1
+    unlocked: 1
+    baseHealth: 30
+    baseDamage: 2
+    baseAktSpeed: 2
+    scalePerLoop: 1.15
+    baseDropChance: 0.5
+    upgradePointsOnKill: 2
+    scoreOneKill: 250
   enemyContainer: {fileID: 574318938}
+  baseSpawnInterval: 5
 --- !u!1 &2055637469
 GameObject:
   m_ObjectHideFlags: 0
@@ -13922,9 +13944,9 @@ RectTransform:
   m_Father: {fileID: 1533420198}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: -17}
+  m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &2055637471
 MonoBehaviour:
@@ -14170,7 +14192,7 @@ RectTransform:
   m_Father: {fileID: 911874182}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -14324,18 +14346,87 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeManager
   upgradeController: {fileID: 1192962438}
   buffClasses:
-  - buffName: HP Buff
+  - buffName: HP
+    buffAmount: 20
+    multiply: 0
+    addtive: 1
+    upgradeCost: 1
+  - buffName: HP
+    buffAmount: 1.1
+    multiply: 1
+    addtive: 0
+    upgradeCost: 1
+  - buffName: DMG
+    buffAmount: 5
+    multiply: 0
+    addtive: 1
+    upgradeCost: 1
+  - buffName: DMG
+    buffAmount: 1.1
+    multiply: 1
+    addtive: 0
+    upgradeCost: 1
+  - buffName: HealAmount
+    buffAmount: 40
+    multiply: 0
+    addtive: 1
+    upgradeCost: 1
+  - buffName: HealAmount
+    buffAmount: 1.1
+    multiply: 1
+    addtive: 0
+    upgradeCost: 1
+  - buffName: MovementSpeed
     buffAmount: 1
     multiply: 0
     addtive: 1
     upgradeCost: 1
-  - buffName: test2
+  - buffName: ATKSpeed
+    buffAmount: 1
+    multiply: 0
+    addtive: 1
+    upgradeCost: 1
+  - buffName: ATKCount
+    buffAmount: 1
+    multiply: 0
+    addtive: 1
+    upgradeCost: 1
+  - buffName: SpawnChance Prefab1
+    buffAmount: 1
+    multiply: 0
+    addtive: 1
+    upgradeCost: 1
+  - buffName: SpawnChance Prefab2
+    buffAmount: 1
+    multiply: 0
+    addtive: 1
+    upgradeCost: 1
+  - buffName: SpawnChance Prefab2
+    buffAmount: 1
+    multiply: 0
+    addtive: 1
+    upgradeCost: 1
+  - buffName: SpawnInterval Reduction
+    buffAmount: -0.1
+    multiply: 0
+    addtive: 1
+    upgradeCost: 1
+  - buffName: EnemyScaleReduce
+    buffAmount: 1
+    multiply: 0
+    addtive: 1
+    upgradeCost: 1
+  - buffName: SpawnChance Reduction Prefab0
     buffAmount: 1
     multiply: 0
     addtive: 1
     upgradeCost: 1
   upgradeButtonPrefab: {fileID: 4823954910395832618, guid: d2ff2b46f34569b428d36a5573aba7c8, type: 3}
   upgradeButtonContainer: {fileID: 1216901494}
+  maxATKSpeedUpgrades: 20
+  currentATKSpeedUpgrades: 0
+  maxATKCountUpgrades: 3
+  currentATKCountUpgrades: 0
 --- !u!1001 &2116970204
 PrefabInstance:
   m_ObjectHideFlags: 0
