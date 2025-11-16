@@ -12077,13 +12077,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaa564f508a94a54d9fb4320308598e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
-  hp: 50
-  dmg: 50
-  speed: 1
-  aktSpeed: 0.5
+  hp: 150
+  dmg: 10
+  speed: 0.5
+  aktSpeed: 3
   atkCount: 1
-  maxHP: 50
-  healAmount: 10
+  maxHP: 150
+  healAmount: 40
   healSpeed: 0
 --- !u!1 &1723681333
 GameObject:
@@ -13873,7 +13873,7 @@ MonoBehaviour:
     scoreOneKill: 0
   - EnemyPrefab: {fileID: 3266613707001950321, guid: d8e7c73423b568f4ca26b0e9db7cba8a, type: 3}
     enemyName: Slime
-    tier: 0
+    tier: 1
     spawnChance: 0.6
     unlocked: 1
     baseHealth: 20
@@ -13885,30 +13885,31 @@ MonoBehaviour:
     scoreOneKill: 100
   - EnemyPrefab: {fileID: 3104077657696033756, guid: 12978a12e6737dd4193e985d8bbcb77a, type: 3}
     enemyName: Bat
-    tier: 0
+    tier: 2
     spawnChance: 0.4
     unlocked: 1
-    baseHealth: 30
+    baseHealth: 15
     baseDamage: 2
     baseAktSpeed: 2
     scalePerLoop: 1.15
-    baseDropChance: 1
+    baseDropChance: 0.3
     upgradePointsOnKill: 1
     scoreOneKill: 250
   - EnemyPrefab: {fileID: 3770074106873277189, guid: 0bab0498a11725f42ab0db44c1c381af, type: 3}
     enemyName: Rock
-    tier: 0
+    tier: 3
     spawnChance: 0.1
     unlocked: 1
-    baseHealth: 30
-    baseDamage: 2
-    baseAktSpeed: 2
+    baseHealth: 60
+    baseDamage: 5
+    baseAktSpeed: 7
     scalePerLoop: 1.15
-    baseDropChance: 0.5
-    upgradePointsOnKill: 2
+    baseDropChance: 0.6
+    upgradePointsOnKill: 15
     scoreOneKill: 250
   enemyContainer: {fileID: 574318938}
   baseSpawnInterval: 5
+  currentSpawnInterval: 0
 --- !u!1 &2055637469
 GameObject:
   m_ObjectHideFlags: 0
@@ -14344,45 +14345,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3d801bedc1444048bb19d79e0f99ab5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeManager
-  upgradeController: {fileID: 1192962438}
-  buffClasses:
+  PossibleUpgrades:
   - buffName: HP
+    buffAmount: 30
+    multiply: 0
+    addtive: 1
+    upgradeCost: 1
+  - buffName: HP
+    buffAmount: 1.1
+    multiply: 1
+    addtive: 0
+    upgradeCost: 1
+  - buffName: DMG
+    buffAmount: 2
+    multiply: 0
+    addtive: 1
+    upgradeCost: 1
+  - buffName: DMG
+    buffAmount: 1.1
+    multiply: 1
+    addtive: 0
+    upgradeCost: 1
+  - buffName: HealAmount
     buffAmount: 20
     multiply: 0
     addtive: 1
     upgradeCost: 1
-  - buffName: HP
-    buffAmount: 1.1
-    multiply: 1
-    addtive: 0
-    upgradeCost: 1
-  - buffName: DMG
-    buffAmount: 5
+  - buffName: HealAmount
+    buffAmount: 20
     multiply: 0
     addtive: 1
-    upgradeCost: 1
-  - buffName: DMG
-    buffAmount: 1.1
-    multiply: 1
-    addtive: 0
-    upgradeCost: 1
-  - buffName: HealAmount
-    buffAmount: 40
-    multiply: 0
-    addtive: 1
-    upgradeCost: 1
-  - buffName: HealAmount
-    buffAmount: 1.1
-    multiply: 1
-    addtive: 0
     upgradeCost: 1
   - buffName: MovementSpeed
-    buffAmount: 1
+    buffAmount: 0.5
     multiply: 0
     addtive: 1
     upgradeCost: 1
   - buffName: ATKSpeed
-    buffAmount: 1
+    buffAmount: -0.1
     multiply: 0
     addtive: 1
     upgradeCost: 1
@@ -14391,42 +14391,40 @@ MonoBehaviour:
     multiply: 0
     addtive: 1
     upgradeCost: 1
-  - buffName: SpawnChance Prefab1
-    buffAmount: 1
-    multiply: 0
-    addtive: 1
-    upgradeCost: 1
-  - buffName: SpawnChance Prefab2
-    buffAmount: 1
-    multiply: 0
-    addtive: 1
-    upgradeCost: 1
-  - buffName: SpawnChance Prefab2
-    buffAmount: 1
-    multiply: 0
-    addtive: 1
-    upgradeCost: 1
-  - buffName: SpawnInterval Reduction
+  - buffName: SpawnChance Reduction Prefab0
     buffAmount: -0.1
     multiply: 0
     addtive: 1
     upgradeCost: 1
+  - buffName: SpawnChance Prefab1
+    buffAmount: 0.1
+    multiply: 0
+    addtive: 1
+    upgradeCost: 1
+  - buffName: SpawnChance Prefab2
+    buffAmount: 0.1
+    multiply: 0
+    addtive: 1
+    upgradeCost: 1
+  - buffName: SpawnChance Prefab3
+    buffAmount: 0.1
+    multiply: 0
+    addtive: 1
+    upgradeCost: 1
+  - buffName: SpawnInterval Reduction
+    buffAmount: 0.1
+    multiply: 0
+    addtive: 1
+    upgradeCost: 1
   - buffName: EnemyScaleReduce
-    buffAmount: 1
+    buffAmount: 0.01
     multiply: 0
     addtive: 1
     upgradeCost: 1
-  - buffName: SpawnChance Reduction Prefab0
-    buffAmount: 1
-    multiply: 0
-    addtive: 1
-    upgradeCost: 1
-  upgradeButtonPrefab: {fileID: 4823954910395832618, guid: d2ff2b46f34569b428d36a5573aba7c8, type: 3}
-  upgradeButtonContainer: {fileID: 1216901494}
-  maxATKSpeedUpgrades: 20
-  currentATKSpeedUpgrades: 0
+  maxATKSpeedUpgrades: 10
   maxATKCountUpgrades: 3
-  currentATKCountUpgrades: 0
+  maxEnemyScaleReduction: 5
+  maxSpawnIntervalReduction: 20
 --- !u!1001 &2116970204
 PrefabInstance:
   m_ObjectHideFlags: 0
