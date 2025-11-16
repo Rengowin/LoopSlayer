@@ -23,6 +23,8 @@ public class Player : MonoBehaviour
 
     float totalHPBuff, totalDMGBuff, totalAKTSpeedBuff;
 
+    bool healAktive = true;
+
     public float currentHP
     {
         get => hp;
@@ -37,6 +39,12 @@ public class Player : MonoBehaviour
                 Debug.Log("Player is dead.");
             }
         }
+    }
+
+    public bool HealAktive
+    {
+        get => healAktive;
+        set => healAktive = value;
     }
 
     public int MaxHPValue

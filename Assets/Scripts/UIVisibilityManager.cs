@@ -9,47 +9,53 @@ public class UIVisibilityManager : MonoBehaviour
     [SerializeField] GameObject upgradeMenu;
     [SerializeField] GameObject highscoreMenu;
 
-    [Header("PlayBoard Renderer Hider")]
-    [SerializeField] PlayBoardRendererHider playBoard;
-
     [Header("Fight UI")]
     [SerializeField] GameObject fightUI;
     [SerializeField] GameObject playerUIContainer;
     [SerializeField] GameObject enemyUIContainer;
     [SerializeField] GameObject battleUIController;
 
+    [Header("PlayBoardRendererHider")]
+    [SerializeField] PlayBoardRendererHider playBoardRendererHider;
+
     void Awake()
     {
         Instance = this;
     }
 
+    // NORMALER SPIELMODUS
     public void ShowNormalUI()
     {
+        // Normale UI sichtbar
         mainUI.SetActive(true);
-        highscoreMenu.SetActive(true);
         upgradeMenu.SetActive(false);
+        highscoreMenu.SetActive(true);
 
-        // PlayBoard nur wieder sichtbar machen
-        playBoard.SetVisible(true);
-
+        // Fight UI aus
         fightUI.SetActive(false);
         playerUIContainer.SetActive(false);
         enemyUIContainer.SetActive(false);
         battleUIController.SetActive(false);
+
+        // 3D Welt sichtbar
+        playBoardRendererHider.SetVisible(true);
     }
 
+    // KAMPFMODUS
     public void ShowFightUI()
     {
+        // Normale UI verstecken
         mainUI.SetActive(false);
-        highscoreMenu.SetActive(false);
         upgradeMenu.SetActive(false);
+        highscoreMenu.SetActive(false);
 
-        // PlayBoard ausblenden (aber aktiv lassen!)
-        playBoard.SetVisible(false);
-
+        // Fight UI sichtbar
         fightUI.SetActive(true);
         playerUIContainer.SetActive(true);
         enemyUIContainer.SetActive(true);
         battleUIController.SetActive(true);
+
+        // 3D Welt unsichtbar
+        playBoardRendererHider.SetVisible(false);
     }
 }

@@ -2,16 +2,15 @@ using UnityEngine;
 
 public class PlayBoardRendererHider : MonoBehaviour
 {
-    Renderer[] renderers;
-
-    void Awake()
-    {
-        renderers = GetComponentsInChildren<Renderer>(true);
-    }
-
     public void SetVisible(bool visible)
     {
+        // Dynamisch ALLE Renderer holen (inkl. nachträglich gespawnter Gegner)
+        Renderer[] renderers = GetComponentsInChildren<Renderer>(true);
+
         foreach (var r in renderers)
-            r.enabled = visible;
+        {
+            if (r != null)
+                r.enabled = visible;
+        }
     }
 }

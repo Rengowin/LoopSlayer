@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement; // Für Szenenwechsel hinzufügen
 
 public class MainUIController : MonoBehaviour
 {
@@ -20,6 +21,14 @@ public class MainUIController : MonoBehaviour
 
     [SerializeField]
     GameObject upgradeMenuPanel; // Das Panel für das Upgrade-Menü
+    [SerializeField]
+    GameObject pauseMenuPanel; // Das Panel für das Pause-Menü
+
+    [SerializeField]
+    UpgradeController upgradeController; // Hinzugefügt, um UpgradeController zu referenzieren
+
+    [SerializeField]
+    GameController gameController; // Hinzugefügt, um GameController zu referenzieren
 
     string scoreTextPrefix = "Score: ";
     string upgradePointsTextPrefix = "Upgrade Points: ";
@@ -29,19 +38,24 @@ public class MainUIController : MonoBehaviour
 
     float playerHP = 0;
 
+    bool aktivemovement = true;
+    bool aktivHeal = true;
+    bool aktivSpawn = true;
+
     bool toogleToPause = false;
     bool toogleToDefeat = false;
     bool battleStartet = false;
 
     //getters and setters
-    public int Score { get => score; set => score = value; }
-    public int UpgradePoints { get => upgradePoints; set => upgradePoints = value; }
-
-    public float PlayerHP { get => playerHP; set => playerHP = value; }
 
     public bool ToogleToPause { get => toogleToPause; set => toogleToPause = value; }
     public bool ToogleToDefeat { get => toogleToDefeat; set => toogleToDefeat = value; }
     public bool BattleStartet { get => battleStartet; set => battleStartet = value; }
+    public int Score { get => score; set => score = value; } // Hinzugefügt, um die Score-Eigenschaft bereitzustellen
+    public float PlayerHP { get => playerHP; set => playerHP = value; }
+
+    // Temporäre Variable für die ursprüngliche Geschwindigkeit
+    private float tempPlayerSpeed;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -51,31 +65,38 @@ public class MainUIController : MonoBehaviour
 
         // Button-Listener hinzufügen
         upgradeMenuButton.onClick.AddListener(ToggleUpgradeMenu);
+
+        // Pause-Menü standardmäßig ausblenden
+        pauseMenuPanel.SetActive(false);
+
+        // Button-Listener für Pause-Menü hinzufügen
+        pauseButton.onClick.AddListener(TogglePauseMenu);
+
+        // Button-Listener für Menü-Button hinzufügen
+        menuButton.onClick.AddListener(LoadMainMenu);
     }
 
     // Update is called once per frame
     void Update()
     {
-    }
+        // Spieler-HP aktualisieren
+        if (BattelControler.Instance != null)
+        {
+            hpBar.value = BattelControler.Instance.Player.currentHP; // Korrektur: currentHP statt CurrentHP
+            hpBar.maxValue = BattelControler.Instance.Player.MaxHPValue;
+        }
 
-    public void UPdateHP(float hp)
-    {
-        hpBar.value = hp;
-    }
+        // Upgrade-Punkte aktualisieren
+        if (upgradeController != null)
+        {
+            upgradePointsText.text = upgradePointsTextPrefix + upgradeController.UpgradePoints.ToString();
+        }
 
-    public void UpdateMaxHP(float maxHp)
-    {
-        hpBar.maxValue = maxHp;
-    }
-
-    public void UpdateScore(int score)
-    {
-        scoreText.text = scoreTextPrefix + score.ToString();
-    }
-
-    public void UpdateUpgradePoints(int upgradePoints)
-    {
-        upgradePointsText.text = upgradePointsTextPrefix + upgradePoints.ToString();
+        // Score aktualisieren
+        if (gameController != null)
+        {
+            scoreText.text = scoreTextPrefix + gameController.MainUIController.Score.ToString();
+        }
     }
 
     // Upgrade-Menü ein-/ausblenden
@@ -83,5 +104,43 @@ public class MainUIController : MonoBehaviour
     {
         bool isActive = upgradeMenuPanel.activeSelf;
         upgradeMenuPanel.SetActive(!isActive); // Zustand umkehren
+    }
+
+    // Pause-Menü ein-/ausblenden
+    void TogglePauseMenu()
+    {
+        GameController.Instance.spawnActiv = !GameController.Instance.spawnActiv;
+
+        if (GameController.Instance.spawnActiv)
+        {
+            // Pause beenden: Ursprüngliche Geschwindigkeit wiederherstellen
+            BattelControler.Instance.Player.Speed = tempPlayerSpeed;
+            BattelControler.Instance.Player.HealAktive = true;
+        }
+        else
+
+    {
+	         
+	}
+        {
+            // Pause aktivieren: Geschwindigkeit speichern und auf 0 setzen
+            tempPlayerSpeed = BattelControler.Instance.Player.Speed;
+            BattelControler.Instance.Player.Speed = 0;
+            BattelControler.Instance.Player.HealAktive = false;
+        }
+
+        bool isActive = pauseMenuPanel.activeSelf;
+        pauseMenuPanel.SetActive(!isActive); // Zustand umkehren
+    }
+
+    public void UpdateUpgradePoints(int upgradePoints)
+    {
+        upgradePointsText.text = upgradePointsTextPrefix + upgradePoints.ToString();
+    }
+
+    public void LoadMainMenu()
+    {
+        // Score nicht speichern und direkt zur Hauptmenüszene wechseln
+        SceneManager.LoadScene("MenuScene", LoadSceneMode.Single);
     }
 }

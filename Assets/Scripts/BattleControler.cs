@@ -11,7 +11,9 @@ public class BattelControler : MonoBehaviour
     Spawn2DManager spawn2DManager;
 
     float tempMovementSpeed;
-    float tempHealSpeed;
+    bool aktivHeal;
+
+    private bool fightSceneLoaded = false; // verhindert doppelte Loads
 
     public Player Player => player;
     public BattelManger BattelManger => battelManger;
@@ -39,22 +41,33 @@ public class BattelControler : MonoBehaviour
     // ------------------------------------------------------
     public void StartBattle()
     {
+        if (fightSceneLoaded)
+        {
+            Debug.LogWarning("StartBattle wurde doppelt aufgerufen!");
+            return;
+        }
+
         // Player einfrieren
         tempMovementSpeed = player.Speed;
-        tempHealSpeed = player.HealSpeed;
 
-        player.HealSpeed = 0;
+        //HealSpeed should be false that the player can't heal during battle
+        player.HealAktive = false;
         player.Speed = 0;
 
-        // Szene wechseln
-        SceneToggleManager.Instance.LoadFightScene();
+        // UI auf Kampfmodus
+        UIVisibilityManager.Instance.ShowFightUI();
+
+        // Spawn in der normalen Welt stoppen
         GameController.Instance.spawnActiv = false;
 
-        // Gegnerliste an BattelManager übergeben
+        // Gegnerliste an BattleManager übergeben
         battelManger.Enemies = enemys;
         battelManger.Player = player;
-
         battelManger.BattelActive = true;
+
+        // FightScene laden
+        SceneToggleManager.Instance.LoadFightScene();
+        fightSceneLoaded = true;
     }
 
     // ------------------------------------------------------
@@ -64,25 +77,22 @@ public class BattelControler : MonoBehaviour
     {
         spawn2DManager = FindObjectOfType<Spawn2DManager>();
 
-        int enemyCount = enemys == null ? 0 : enemys.Count;
-        Debug.Log($"spawnEnemysAfterSecenLoad: Spawn2DManager found={(spawn2DManager != null)}, enemysCount={enemyCount}");
-
         if (spawn2DManager == null)
         {
-            Debug.LogError("spawnEnemysAfterSecenLoad: Kein Spawn2DManager gefunden. Spawn abgebrochen.");
+            Debug.LogError("Kein Spawn2DManager gefunden!");
             return;
         }
 
         if (enemys == null || enemys.Count == 0)
         {
-            Debug.LogWarning("spawnEnemysAfterSecenLoad: Keine Gegner vorhanden.");
+            Debug.LogWarning("Keine Gegner vorhanden.");
             return;
         }
 
-        // Gegner + Enemy UI erstellen
+        // Gegner spawnen
         spawn2DManager.SpawnEnemy(enemys);
 
-        // Player UI erstellen
+        // Player UI erzeugen
         BattleUIController.Instance.CreatePlayerUI(player);
     }
 
@@ -91,11 +101,15 @@ public class BattelControler : MonoBehaviour
     // ------------------------------------------------------
     public void EndBattle()
     {
-        // Player Movement + Heal wieder aktivieren
+        // Player zurücksetzen
         player.Speed = tempMovementSpeed;
-        player.HealSpeed = tempHealSpeed;
+        player.HealAktive = true;
 
+        // Spawning wieder aktivieren
         GameController.Instance.spawnActiv = true;
+
+        // UI auf normalen Modus
+        UIVisibilityManager.Instance.ShowNormalUI();
 
         // UI entfernen
         if (BattleUIController.Instance != null)
@@ -103,7 +117,12 @@ public class BattelControler : MonoBehaviour
 
         enemys?.Clear();
 
-        SceneToggleManager.Instance.UnloadFightScene();
+        // FightScene entladen
+        if (fightSceneLoaded)
+        {
+            SceneToggleManager.Instance.UnloadFightScene();
+            fightSceneLoaded = false;
+        }
     }
 
     // ------------------------------------------------------
@@ -111,8 +130,7 @@ public class BattelControler : MonoBehaviour
     // ------------------------------------------------------
     public void AddEnemy(List<Enemy> newEnemys)
     {
-        foreach (Enemy enemy in newEnemys)
-            enemys.Add(enemy);
+        enemys.AddRange(newEnemys);
     }
 
     // ------------------------------------------------------
@@ -124,16 +142,12 @@ public class BattelControler : MonoBehaviour
 
         if (spawn2DManager != null)
         {
-            // VISUAL entfernen über EnemyVisualPair
             EnemyVisualPair pair = spawn2DManager.GetPairForEnemy(enemy);
 
             if (pair != null)
                 spawn2DManager.EnemieDied(pair.visual);
-            else
-                Debug.LogWarning("RemoveEnemy(): Kein Visual-Pair gefunden.");
         }
 
-        // wenn keine Gegner mehr → Kampf beenden
         if (enemys.Count == 0)
             EndBattle();
     }

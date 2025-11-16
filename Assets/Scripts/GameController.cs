@@ -13,9 +13,16 @@ public class GameController : MonoBehaviour
     [SerializeField]
     SpawnManager spawnManager;
 
+    [SerializeField]
+    HighscoreManager highscoreManager;
+
+    [SerializeField]
+    GameObject gameOverPanel;
+
     Player player;
 
     int upgradePoints = 0;
+    int score =0; // Score-Variable hinzugefügt
 
     bool isPause = false;
     bool spawnsAktiv = true;
@@ -30,10 +37,25 @@ public class GameController : MonoBehaviour
         get => mainUIController;
     }
 
+    public HighscoreManager HighscoreManager
+    {
+        get => highscoreManager;
+    }
+
     public bool spawnActiv
     {
         get => spawnsAktiv;
         set => spawnsAktiv = value;
+    }
+
+    public int Score
+    {
+        get => score;
+        set
+        {
+            score = value;
+            mainUIController.Score = score; // UI aktualisieren
+        }
     }
 
     private void Awake()
@@ -59,11 +81,16 @@ public class GameController : MonoBehaviour
 
     public void GameOver()
     {
+
+        HighscoreManager.Instance.AddScore(score);
+        gameOverPanel.SetActive(true);
         Debug.Log("Game Over!");
+    
+
     }
 
-    // Upgrade-Punkte hinzufügen
-    public void AddUpgradePoints(int amount)
+// Upgrade-Punkte hinzufügen
+public void AddUpgradePoints(int amount)
     {
         upgradePoints += amount;
         mainUIController.UpdateUpgradePoints(upgradePoints); // UI aktualisieren
@@ -85,5 +112,10 @@ public class GameController : MonoBehaviour
     public int GetUpgradePoints()
     {
         return upgradePoints;
+    }
+
+    public void AddScore(int amount)
+    {
+        Score += amount; // Score erhöhen
     }
 }

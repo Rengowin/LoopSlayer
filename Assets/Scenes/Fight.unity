@@ -165,8 +165,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Spawn2DManager
   enemyPrefabs:
   - {fileID: 1340985932407252051, guid: 47f0e63c651933b42a591d179dcc40bf, type: 3}
-  enemyUIPrefab: {fileID: 2596175203091483997, guid: 7ea1e1002ce446d449017517ca4f2f7d, type: 3}
-  worldCanvas: {fileID: 0}
 --- !u!1 &827696826
 GameObject:
   m_ObjectHideFlags: 0

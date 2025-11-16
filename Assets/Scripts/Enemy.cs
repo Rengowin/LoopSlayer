@@ -105,6 +105,9 @@ public class Enemy : MonoBehaviour
             }
         }
 
+        // Score hinzufügen
+        GameController.Instance.AddScore(scoreOneKill);
+
         // --- Visual + UI korrekt entfernen ---
         if (BattelControler.Instance.Spawn2DManager != null)
         {
