@@ -6715,7 +6715,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 311, y: 48.00001}
+  m_AnchoredPosition: {x: 311, y: -2}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1019573896
@@ -9941,7 +9941,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 311, y: -1.9999886}
+  m_AnchoredPosition: {x: 311, y: 48}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1423062763
@@ -14726,7 +14726,7 @@ PrefabInstance:
     - target: {fileID: 4279158747188028195, guid: f824ea9f8e2072a4baf8f8c7b8a31f78, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 4fa1d46de3bbeba41be7146fc0c9b176, type: 2}
+      objectReference: {fileID: 2100000, guid: 83ebdb2f9c7056d4986fc864b7650ba8, type: 2}
     - target: {fileID: 4537799405957136515, guid: f824ea9f8e2072a4baf8f8c7b8a31f78, type: 3}
       propertyPath: 'waypoints.Array.data[0]'
       value: 
