@@ -13894,7 +13894,7 @@ MonoBehaviour:
     scalePerLoop: 1.15
     baseDropChance: 0.3
     upgradePointsOnKill: 1
-    scoreOneKill: 175
+    scoreOneKill: 250
   - EnemyPrefab: {fileID: 3770074106873277189, guid: 0bab0498a11725f42ab0db44c1c381af, type: 3}
     enemyName: Rock
     tier: 3

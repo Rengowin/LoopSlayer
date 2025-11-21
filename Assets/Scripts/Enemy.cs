@@ -65,7 +65,7 @@ public class Enemy : MonoBehaviour
         hp = (float)(data.BaseHealth() * Math.Pow(data.ScalePerLoop, anzLoops));
         dmg = (float)(data.BaseDamage() * Math.Pow(data.ScalePerLoop, anzLoops));
         aktSpeed = data.BaseAktSpeed();
-        scoreOneKill = data.ScoreOneKill() + (int)(data.ScoreOneKill() * anzLoops); //TODO: vlt zu starkes score scaling wenn fertig ist anschauen :D
+        scoreOneKill = data.ScoreOneKill() + (int)(25 * anzLoops); //TODO: vlt zu starkes score scaling wenn fertig ist anschauen :D
         dropChance = data.BaseDropChance();
         currentActionTimer = aktSpeed;
         dropAmount = data.UpgradePointsOnKill();

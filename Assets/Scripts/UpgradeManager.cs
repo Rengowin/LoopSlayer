@@ -1,8 +1,12 @@
 ﻿using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class UpgradeManager : MonoBehaviour
 {
+    [SerializeField]
+    UpgradeController upgradeController;
+
     public static UpgradeManager Instance;
     [Header("Upgrade Pool")]
     [SerializeField] List<BuffClass> PossibleUpgrades = new List<BuffClass>();
@@ -15,8 +19,19 @@ public class UpgradeManager : MonoBehaviour
     [SerializeField] float maxEnemyScaleReduction;
     [SerializeField] float maxSpawnIntervalReduction;
 
+    [Header("UI References")]
+    [SerializeField]
+    GameObject upgradeButtonPrefab;
+    [SerializeField]
+    GameObject upgradeButtonContainer;
+
+    bool canInitialize = false;
+    bool isInitialized = false;
+
     int currentATKSpeedUpgrades = 0;
     int currentATKCountUpgrades = 0;
+
+    List<UpgradeButtonScript> upgradeButtons = new List<UpgradeButtonScript>();
 
     // ===== BUFF LISTEN =====
     List<float> HPBuffAddition = new List<float>();
@@ -56,6 +71,36 @@ public class UpgradeManager : MonoBehaviour
     void Awake()
     {
         Instance = this;
+    }
+
+    void Start()
+    {
+        foreach (BuffClass buff in PossibleUpgrades)
+        {
+            createBuffButtons(buff);
+        }
+    }
+
+    public void Update()
+    { 
+    }
+
+    public void createBuffButtons(BuffClass buffInfo)
+    {
+        Debug.Log($"Erstelle Button f�r Buff: {buffInfo.BuffName}");
+        GameObject obj = Instantiate(upgradeButtonPrefab);
+        obj.transform.SetParent(upgradeButtonContainer.transform, false);
+
+        var script = obj.GetComponent<UpgradeButtonScript>();
+        if (script != null)
+        {
+            Debug.Log("UpgradeButtonScript gefunden. Initialisiere Button.");
+            script.Init(buffInfo, this, upgradeController);
+        }
+        else
+        {
+            Debug.LogError("UpgradeButtonScript konnte nicht gefunden werden.");
+        }
     }
 
     // =======================================================================

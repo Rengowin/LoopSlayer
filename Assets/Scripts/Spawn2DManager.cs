@@ -13,6 +13,7 @@ public class Spawn2DManager : MonoBehaviour
 
     void Start()
     {
+        
         // Feste UI-Positionen für Gegner im 2D Fight
         spawnPoints.Add(new Vector3(4, 3, 0));
         spawnPoints.Add(new Vector3(4, -1, 0));
