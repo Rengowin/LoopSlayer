@@ -50,7 +50,7 @@ public class UpgradeButtonScript : MonoBehaviour
 
     private string createBuffDescription()
     {
-        buffDescriptionTextString = "This upgrades gives the you a";
+        buffDescriptionTextString = "This upgrades gives you a";
         if (buffClass.Multiply)
         {
             buffDescriptionTextString += " multiplicative ";

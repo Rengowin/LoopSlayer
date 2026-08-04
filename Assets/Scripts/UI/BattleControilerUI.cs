@@ -23,6 +23,13 @@ public class BattleUIController : MonoBehaviour
     private int playerIndex = 0;
     private GameObject currentPlayerUI;
 
+    //what i added after my 3rd project just to fix stuff with scale/ for portfolio purposes and to show growth? idk
+    [SerializeField]
+    List<RectTransform> enemyPos = new List<RectTransform>();
+
+    [SerializeField]
+    RectTransform playerPos;
+
     void Awake()
     {
         Instance = this;
@@ -36,16 +43,18 @@ public class BattleUIController : MonoBehaviour
         GameObject ui = Instantiate(enemyUIPrefab, enemyUIContainer);
         RectTransform rt = ui.GetComponent<RectTransform>();
 
-        rt.anchorMin = new Vector2(1, 1);
-        rt.anchorMax = new Vector2(1, 1);
-        rt.pivot = new Vector2(1, 1);
-
-        if (enemyIndex < enemyUIPositions.Count)
-            rt.anchoredPosition = enemyUIPositions[enemyIndex];
+        if (enemyIndex < enemyPos.Count && enemyPos[enemyIndex] != null)
+        {
+            rt.position = enemyPos[enemyIndex].position;
+        }
         else
-            rt.anchoredPosition = new Vector2(-20, -enemyIndex * 150f);
+        {
+            Debug.LogWarning($"Keine Enemy-UI-Position für Index {enemyIndex} vorhanden.");
+        }
 
-        var controller = ui.GetComponent<CharacterUIController>();
+        CharacterUIController controller =
+            ui.GetComponent<CharacterUIController>();
+
         controller.InitEnemy(enemy);
 
         enemyIndex++;
@@ -55,27 +64,30 @@ public class BattleUIController : MonoBehaviour
     public void RemoveEnemyUI(GameObject uiGO)
     {
         Destroy(uiGO);
-        enemyIndex--;
-
-        // UI-Container neu sortieren
-        RearrangeEnemyUI();
     }
 
+
+    // it was used before ui fix since it help somehow :D, and it will stay in because if someone wants to see this code and since it was my first unity projekt stuff idk :D since portfolio purposes
     private void RearrangeEnemyUI()
     {
         enemyIndex = 0;
 
         foreach (Transform child in enemyUIContainer)
         {
-            RectTransform rt = child.GetComponent<RectTransform>();
-
-            if (enemyIndex < enemyUIPositions.Count)
+            if (enemyIndex >= enemyPos.Count)
             {
-                rt.anchoredPosition = enemyUIPositions[enemyIndex];
+                Debug.LogWarning(
+                    $"Keine Enemy-UI-Position für Index {enemyIndex} vorhanden."
+                );
+                break;
             }
-            else
+
+            RectTransform rt = child.GetComponent<RectTransform>();
+            RectTransform target = enemyPos[enemyIndex];
+
+            if (rt != null && target != null)
             {
-                rt.anchoredPosition = new Vector2(-20, -enemyIndex * 150f);
+                rt.position = target.position;
             }
 
             enemyIndex++;
@@ -88,27 +100,28 @@ public class BattleUIController : MonoBehaviour
     // -------------------------------------------------------
     public GameObject CreatePlayerUI(Player player)
     {
-        // wenn noch ein altes UI existiert → löschen
         if (currentPlayerUI != null)
             Destroy(currentPlayerUI);
 
         GameObject ui = Instantiate(playerUIPrefab, playerUIContainer);
-        currentPlayerUI = ui; // speichern!
+        currentPlayerUI = ui;
 
         RectTransform rt = ui.GetComponent<RectTransform>();
 
-        rt.anchorMin = new Vector2(0, 1);
-        rt.anchorMax = new Vector2(0, 1);
-        rt.pivot = new Vector2(0, 1);
-
-        if (playerUIPositions.Count > 0)
-            rt.anchoredPosition = playerUIPositions[0];
+        if (playerPos != null)
+        {
+            rt.position = playerPos.position;
+        }
         else
-            rt.anchoredPosition = new Vector2(20f, -20f);
+        {
+            Debug.LogWarning("Keine Player-UI-Position gesetzt.");
+        }
 
-        var controller = ui.GetComponent<CharacterUIController>();
+        CharacterUIController controller =
+            ui.GetComponent<CharacterUIController>();
+
         controller.InitPlayer(player);
-        
+
         return ui;
     }
 

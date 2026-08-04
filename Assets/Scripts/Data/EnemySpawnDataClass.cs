@@ -6,7 +6,7 @@ public class EnemySpawnData
     [SerializeField] GameObject EnemyPrefab;
     [SerializeField] string enemyName;
     [SerializeField] int tier;
-    [SerializeField, Range(0f, 1f)] float spawnChance;
+    [SerializeField, Range(0f, 3f)] float spawnChance;
     [SerializeField] bool unlocked = true;
 
     [Header("BaseStats")]
@@ -30,7 +30,7 @@ public class EnemySpawnData
     public float SpawnChance
     {
         get => spawnChance;
-        set => spawnChance = Mathf.Clamp01(value);
+        set => spawnChance = Mathf.Clamp(value, 0f, 3f);
     }
 
     public float ScalePerLoop
@@ -44,7 +44,7 @@ public class EnemySpawnData
     // SpawnChance ändern (Add/Remove)
     public void ModifySpawnChance(float delta)
     {
-        spawnChance = Mathf.Clamp01(spawnChance + delta);
+        spawnChance = Mathf.Clamp(spawnChance + delta, 0f, 3f);
     }
 
     // Scale reduzieren (z. B. kleinere Gegner)

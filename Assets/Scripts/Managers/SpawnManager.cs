@@ -65,7 +65,6 @@ public class SpawnManager : MonoBehaviour
     // ============= EXISTIERENDE FUNKTIONEN (unverändert) =============
     private void SpawnEnemy()
     {
-        // unchanged
         GameController gc = GameController.Instance;
 
         int anzLoops = gc.PathManager.StartPath.TimesLooped;
@@ -74,20 +73,26 @@ public class SpawnManager : MonoBehaviour
         foreach (Path path in gc.PathManager.Paths)
         {
             EnemySpawnData data = ChooseWeigtedEnemy();
+
             if (data == null || data.EnemyPrefab1() == null)
-                return;
+                continue;
 
-            if (path.canSpawn())
-            {
-                GameObject obj = Instantiate(data.EnemyPrefab1(), path.GetSpawnPoint(), Quaternion.identity);
+            if (!path.canSpawn())
+                continue;
 
-                if (enemyContainer != null) obj.transform.SetParent(enemyContainer.transform);
+            GameObject obj = Instantiate(
+                data.EnemyPrefab1(),
+                path.GetSpawnPoint(),
+                Quaternion.identity
+            );
 
-                Enemy enemy = obj.GetComponent<Enemy>();
-                enemy.Init(data, anzLoops);
+            if (enemyContainer != null)
+                obj.transform.SetParent(enemyContainer.transform);
 
-                path.AddEnemyToPath(enemy);
-            }
+            Enemy enemy = obj.GetComponent<Enemy>();
+            enemy.Init(data, anzLoops);
+
+            path.AddEnemyToPath(enemy);
         }
     }
 
