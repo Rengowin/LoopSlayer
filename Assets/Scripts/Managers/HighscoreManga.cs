@@ -24,12 +24,13 @@ public class HighscoreManager : MonoBehaviour
         Load();
     }
 
-    
+    /*
     void Start()
     {
         PlayerPrefs.DeleteKey("highscores");
         PlayerPrefs.Save();
     }
+    */
     
     public void AddScore(int score)
     {
