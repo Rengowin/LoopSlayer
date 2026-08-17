@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class BattelManger : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     List<Enemy> enemies = new List<Enemy>();
 
@@ -16,11 +15,6 @@ public class BattelManger : MonoBehaviour
     public List<Enemy> Enemies { get => enemies; set => enemies = value; }
     public Player Player { get => player; set => player = value; }
 
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
     void Update()
     {
         if(battelActive)
@@ -54,7 +48,6 @@ public class BattelManger : MonoBehaviour
             {
                 battelActive = false;
                 BattelControler.Instance.EndBattle();
-                Debug.Log("Player HP nach dem fight ist: " + player.currentHP);
             }
         }
     }
@@ -62,12 +55,10 @@ public class BattelManger : MonoBehaviour
     public void EnemyAction(Enemy enemy)
     {
         player.currentHP -= enemy.DMG;
-        Debug.Log("Der Spieler hat: " + enemy.DMG + "dmg bekommen");
     }
 
     public void PlayerAction()
     {
-        Debug.Log("Player Action: der spieler hat: " + player.Dmg + "dmg");
         int attackCount = Mathf.Min(player.ATKCount, enemies.Count);
         List<Enemy> availableEnemies = new List<Enemy>(enemies);
 

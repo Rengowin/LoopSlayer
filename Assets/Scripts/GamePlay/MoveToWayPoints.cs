@@ -7,26 +7,22 @@ public class MoveToWayPoints : MonoBehaviour
     [SerializeField]
     List<GameObject> waypoints;
 
-    private float movementSpeed;
-    //private int currentWayPointID = 0; //not used yet and may be never :D
-    private int nextWayPointID = 0;
-    private Vector3 nextWayPoint;
-    private Vector3 currentPosition;
+    float movementSpeed;
+    int nextWayPointID = 0;
+    Vector3 nextWayPoint;
+    Vector3 currentPosition;
 
-    private Vector3 directionTowardsWaypoint;
-    private float distance;
+    Vector3 directionTowardsWaypoint;
+    float distance;
 
-    private Player player;
+    Player player;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         player = FindObjectOfType<Player>();
-        Debug.Log("Player Speed: " + player.Speed);
         movementSpeed = player.Speed;
     }
 
-    // Update is called once per frame
     void Update()
     {
         currentPosition = transform.position;
@@ -47,7 +43,6 @@ public class MoveToWayPoints : MonoBehaviour
     
     private void CheckWhereTomoveTo()
     {
-        //Debug.Log("we opend the check where to move");
         if (nextWayPointID < waypoints.Count)
         {
             nextWayPoint = waypoints[nextWayPointID].transform.position;

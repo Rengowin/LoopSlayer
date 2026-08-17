@@ -4,7 +4,6 @@ using TMPro;
 
 public class UpgradeButtonScript : MonoBehaviour
 {
-    // all infos what buff it gives and so on
     BuffClass buffClass;
 
     [SerializeField]
@@ -20,25 +19,9 @@ public class UpgradeButtonScript : MonoBehaviour
     UpgradeController upgradeController;
 
     string buffDescriptionTextString = "";
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-
-    void Awake()
-    {
-    }
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 
     public void Init(BuffClass buffInfo, UpgradeManager manager, UpgradeController controller)
     {
-        Debug.Log($"Init aufgerufen: BuffName = {buffInfo.BuffName}, BuffAmount = {buffInfo.BuffAmount}");
         buffClass = buffInfo;
         upgradeManager = manager;
         upgradeController = controller;
@@ -67,15 +50,10 @@ public class UpgradeButtonScript : MonoBehaviour
 
     public void OnUpgradeButtonPressed()
     {
-        Debug.Log("Upgrade Button Pressed, es wird probiert ein upgrade gekauft");
         if (upgradeController.UpgradePoints >= buffClass.UpgradeCost)
         {
             upgradeController.UpgradePoints -= buffClass.UpgradeCost;
             upgradeManager.applyBuff(buffClass);
-        }
-        else
-        {
-            Debug.Log("Not enough upgrade points!");
         }
     }
 }

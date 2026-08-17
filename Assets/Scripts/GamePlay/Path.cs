@@ -16,7 +16,6 @@ public class Path : MonoBehaviour
     }
 
 
-    // Gegner zu diesem Weg hinzufügen
     public void AddEnemyToPath(Enemy enemy)
     {
         if (canSpawn())
@@ -29,18 +28,14 @@ public class Path : MonoBehaviour
         }
     }
 
-    // Gegner an den BattleManager übergeben
     private void OnTriggerEnter(Collider other)
     {
         if (enemiesOnPath.Count == 0)
             return;
 
-        // Kopie übergeben, damit Path die Original-Liste sicher leeren kann
         BattelControler.Instance.Enemys = new System.Collections.Generic.List<Enemy>(enemiesOnPath);
         BattelControler.Instance.StartBattle();
-        Debug.Log($"Es wurden {enemiesOnPath.Count} Gegner an den BattleController übergeben.");
 
-        // Path wieder freigeben für neue Spawns
         enemiesOnPath.Clear();
     }
 

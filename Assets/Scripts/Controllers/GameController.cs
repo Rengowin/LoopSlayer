@@ -25,10 +25,13 @@ public class GameController : MonoBehaviour
     Player player;
 
     int upgradePoints = 0;
-    int score =0; // Score-Variable hinzugefügt
+    int score =0;
 
     bool isPause = false;
     bool spawnsAktiv = true;
+
+    float gameOverTimer = -1f;
+
 
     public SpawnManager SpawnManager
         {get => spawnManager; }
@@ -57,7 +60,7 @@ public class GameController : MonoBehaviour
         set
         {
             score = value;
-            mainUIController.Score = score; // UI aktualisieren
+            mainUIController.Score = score;
         }
     }
 
@@ -70,38 +73,29 @@ public class GameController : MonoBehaviour
         }
         Instance = this;
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         player = BattelControler.Instance.Player;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // Timer prüfen und Szene wechseln
         if (gameOverTimer > 0)
         {
-            gameOverTimer -= Time.deltaTime; // Zeit reduzieren
-            Debug.Log($"Timer: {gameOverTimer}"); // Timer-Wert ausgeben
+            gameOverTimer -= Time.deltaTime;
             if (gameOverTimer <= 0)
             {
-                Debug.Log("Lade MenuScene...");
-                SceneManager.LoadScene("MenuScene"); // Szene laden
+                SceneManager.LoadScene("MenuScene");
             }
         }
     }
-
-    private float gameOverTimer = -1f; // Timer für die Verzögerung
 
     public void GameOver()
     {
         HighscoreManager.Instance.AddScore(score);
         gameOverPanel.SetActive(true);
-        Debug.Log("Game Over!");
 
-        // Szene nach 3 Sekunden laden
-        Invoke("LoadMenuScene", 3f);
+        Invoke(nameof(LoadMenuScene), 5f);
     }
 
     private void LoadMenuScene()
@@ -109,26 +103,23 @@ public class GameController : MonoBehaviour
         SceneManager.LoadScene("MenuScene");
     }
 
-    // Upgrade-Punkte hinzufügen
     public void AddUpgradePoints(int amount)
     {
         upgradePoints += amount;
-        mainUIController.UpdateUpgradePoints(upgradePoints); // UI aktualisieren
+        mainUIController.UpdateUpgradePoints(upgradePoints);
     }
 
-    // Upgrade-Punkte ausgeben
     public bool SpendUpgradePoints(int amount)
     {
         if (upgradePoints >= amount)
         {
             upgradePoints -= amount;
-            mainUIController.UpdateUpgradePoints(upgradePoints); // UI aktualisieren
+            mainUIController.UpdateUpgradePoints(upgradePoints);
             return true;
         }
-        return false; // Nicht genug Punkte
+        return false;
     }
 
-    // Aktuelle Upgrade-Punkte abfragen
     public int GetUpgradePoints()
     {
         return upgradePoints;
@@ -136,6 +127,6 @@ public class GameController : MonoBehaviour
 
     public void AddScore(int amount)
     {
-        Score += amount; // Score erhöhen
+        Score += amount;
     }
 }

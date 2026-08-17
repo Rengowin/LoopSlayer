@@ -22,7 +22,6 @@ public class EnemySpawnData
     [SerializeField] int upgradePointsOnKill;
     [SerializeField] int scoreOneKill;
 
-    // === Getter/Setter ===
     public GameObject EnemyPrefab1() => EnemyPrefab;
     public string EnemyName() => enemyName;
     public int Tier() => tier;
@@ -39,21 +38,16 @@ public class EnemySpawnData
         set => scalePerLoop = Mathf.Max(0.01f, value);
     }
 
-    // === BUFF METHODS ===
-
-    // SpawnChance ändern (Add/Remove)
     public void ModifySpawnChance(float delta)
     {
         spawnChance = Mathf.Clamp(spawnChance + delta, 0f, 3f);
     }
 
-    // Scale reduzieren (z. B. kleinere Gegner)
     public void ModifyScale(float delta)
     {
         scalePerLoop = Mathf.Max(0.1f, scalePerLoop - delta);
     }
 
-    // Getter
     public bool Unlocked() => unlocked;
     public int BaseHealth() => baseHealth;
     public int BaseDamage() => baseDamage;

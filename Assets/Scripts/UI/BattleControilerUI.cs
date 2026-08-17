@@ -6,12 +6,16 @@ public class BattleUIController : MonoBehaviour
     public static BattleUIController Instance { get; private set; }
 
     [Header("Enemy UI")]
-    [SerializeField] private Transform enemyUIContainer;
-    [SerializeField] private GameObject enemyUIPrefab;
+    [SerializeField]
+    Transform enemyUIContainer;
+    [SerializeField]
+    GameObject enemyUIPrefab;
 
     [Header("Player UI")]
-    [SerializeField] private Transform playerUIContainer;
-    [SerializeField] private GameObject playerUIPrefab;
+    [SerializeField]
+    Transform playerUIContainer;
+    [SerializeField]
+    GameObject playerUIPrefab;
 
     [Header("Manuelle UI Positionen für Gegner")]
     public List<Vector2> enemyUIPositions = new List<Vector2>();
@@ -19,11 +23,10 @@ public class BattleUIController : MonoBehaviour
     [Header("Manuelle UI Positionen für Spieler")]
     public List<Vector2> playerUIPositions = new List<Vector2>();
 
-    private int enemyIndex = 0;
-    private int playerIndex = 0;
-    private GameObject currentPlayerUI;
+    int enemyIndex = 0;
+    int playerIndex = 0;
+    GameObject currentPlayerUI;
 
-    //what i added after my 3rd project just to fix stuff with scale/ for portfolio purposes and to show growth? idk
     [SerializeField]
     List<RectTransform> enemyPos = new List<RectTransform>();
 
@@ -35,9 +38,6 @@ public class BattleUIController : MonoBehaviour
         Instance = this;
     }
 
-    // -------------------------------------------------------
-    // ENEMY UI MIT MANUELLER POSITION
-    // -------------------------------------------------------
     public GameObject CreateEnemyUIAndReturn(Enemy enemy)
     {
         GameObject ui = Instantiate(enemyUIPrefab, enemyUIContainer);
@@ -66,8 +66,6 @@ public class BattleUIController : MonoBehaviour
         Destroy(uiGO);
     }
 
-
-    // it was used before ui fix since it help somehow :D, and it will stay in because if someone wants to see this code and since it was my first unity projekt stuff idk :D since portfolio purposes
     private void RearrangeEnemyUI()
     {
         enemyIndex = 0;
@@ -94,10 +92,6 @@ public class BattleUIController : MonoBehaviour
         }
     }
 
-
-    // -------------------------------------------------------
-    // PLAYER UI MIT MANUELLER POSITION
-    // -------------------------------------------------------
     public GameObject CreatePlayerUI(Player player)
     {
         if (currentPlayerUI != null)
@@ -138,7 +132,6 @@ public class BattleUIController : MonoBehaviour
     {
         enemyIndex = 0;
 
-        // optional: UI löschen aus Container
         foreach (Transform child in enemyUIContainer)
         {
             Destroy(child.gameObject);

@@ -5,17 +5,16 @@ using TMPro;
 public class CharacterUIController : MonoBehaviour
 {
     [Header("UI Elements")]
-    [SerializeField] private Slider hpBar;
-    [SerializeField] private TextMeshProUGUI infoText;
+    [SerializeField]
+    Slider hpBar;
+    [SerializeField]
+    TextMeshProUGUI infoText;
 
-    private Enemy enemy;
-    private Player player;
+    Enemy enemy;
+    Player player;
 
-    private float maxHP;
+    float maxHP;
 
-    // ---------------------------------------------------------
-    // INIT FOR ENEMY (STATIC UI)
-    // ---------------------------------------------------------
     public void InitEnemy(Enemy enemy)
     {
         this.enemy = enemy;
@@ -31,9 +30,6 @@ public class CharacterUIController : MonoBehaviour
             $"Score: {enemy.ScoreOneKill}";
     }
 
-    // ---------------------------------------------------------
-    // INIT FOR PLAYER (STATIC UI)
-    // ---------------------------------------------------------
     public void InitPlayer(Player player)
     {
         this.player = player;
@@ -49,18 +45,13 @@ public class CharacterUIController : MonoBehaviour
             $"MaxHP: {player.MaxHPValue}";
     }
 
-    // ---------------------------------------------------------
-    // UPDATE UI
-    // ---------------------------------------------------------
     void Update()
     {
         if (player != null)
         {
-            // Max HP live synchronisieren
             if (hpBar.maxValue != player.MaxHPValue)
                 hpBar.maxValue = player.MaxHPValue;
 
-            // Aktuelles HP setzen
             hpBar.value = player.currentHP;
         }
         if (enemy != null)

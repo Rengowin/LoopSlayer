@@ -23,18 +23,15 @@ public class PathManager : MonoBehaviour
 
     void Awake()
     {
-        // Alle Wege in der Szene finden und zur Liste hinzufügen
         paths.AddRange(FindObjectsOfType<Path>());
         Debug.Log($"Es wurden {paths.Count} Wege automatisch registriert.");
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         startPath = FindObjectOfType<StartPath>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         anzDerLoops = startPath.TimesLooped;

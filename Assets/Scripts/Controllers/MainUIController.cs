@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.SceneManagement; // Für Szenenwechsel hinzufügen
+using UnityEngine.SceneManagement;
 
 public class MainUIController : MonoBehaviour
 {
@@ -20,15 +20,15 @@ public class MainUIController : MonoBehaviour
     Button upgradeMenuButton;
 
     [SerializeField]
-    GameObject upgradeMenuPanel; // Das Panel für das Upgrade-Menü
+    GameObject upgradeMenuPanel;
     [SerializeField]
-    GameObject pauseMenuPanel; // Das Panel für das Pause-Menü
+    GameObject pauseMenuPanel; 
 
     [SerializeField]
-    UpgradeController upgradeController; // Hinzugefügt, um UpgradeController zu referenzieren
+    UpgradeController upgradeController;
 
     [SerializeField]
-    GameController gameController; // Hinzugefügt, um GameController zu referenzieren
+    GameController gameController;
 
     string scoreTextPrefix = "Score: ";
     string upgradePointsTextPrefix = "Upgrade Points: ";
@@ -47,67 +47,52 @@ public class MainUIController : MonoBehaviour
     bool battleStartet = false;
     bool isPaused = false;
 
-    //getters and setters
-
     public bool ToogleToPause { get => toogleToPause; set => toogleToPause = value; }
     public bool ToogleToDefeat { get => toogleToDefeat; set => toogleToDefeat = value; }
     public bool BattleStartet { get => battleStartet; set => battleStartet = value; }
-    public int Score { get => score; set => score = value; } // Hinzugefügt, um die Score-Eigenschaft bereitzustellen
+    public int Score { get => score; set => score = value; }
     public float PlayerHP { get => playerHP; set => playerHP = value; }
 
-    // Temporäre Variable für die ursprüngliche Geschwindigkeit
     private float tempPlayerSpeed;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        // Upgrade-Menü standardmäßig ausblenden
         upgradeMenuPanel.SetActive(false);
 
-        // Button-Listener hinzufügen
         upgradeMenuButton.onClick.AddListener(ToggleUpgradeMenu);
 
-        // Pause-Menü standardmäßig ausblenden
         pauseMenuPanel.SetActive(false);
 
-        // Button-Listener für Pause-Menü hinzufügen
         pauseButton.onClick.AddListener(TogglePauseMenu);
 
-        // Button-Listener für Menü-Button hinzufügen
         menuButton.onClick.AddListener(LoadMainMenu);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // Spieler-HP aktualisieren
         if (BattelControler.Instance != null)
         {
-            hpBar.value = BattelControler.Instance.Player.currentHP; // Korrektur: currentHP statt CurrentHP
+            hpBar.value = BattelControler.Instance.Player.currentHP;
             hpBar.maxValue = BattelControler.Instance.Player.MaxHPValue;
         }
 
-        // Upgrade-Punkte aktualisieren
         if (upgradeController != null)
         {
             upgradePointsText.text = upgradePointsTextPrefix + upgradeController.UpgradePoints.ToString();
         }
 
-        // Score aktualisieren
         if (gameController != null)
         {
             scoreText.text = scoreTextPrefix + gameController.MainUIController.Score.ToString();
         }
     }
 
-    // Upgrade-Menü ein-/ausblenden
     void ToggleUpgradeMenu()
     {
         bool isActive = upgradeMenuPanel.activeSelf;
-        upgradeMenuPanel.SetActive(!isActive); // Zustand umkehren
+        upgradeMenuPanel.SetActive(!isActive);
     }
 
-    // Pause-Menü ein-/ausblenden
     void TogglePauseMenu()
     {
 
@@ -122,7 +107,7 @@ public class MainUIController : MonoBehaviour
             Time.timeScale = 1f;
         }
         bool isActive = pauseMenuPanel.activeSelf;
-        pauseMenuPanel.SetActive(!isActive); // Zustand umkehren
+        pauseMenuPanel.SetActive(!isActive);
 
     }
 
@@ -133,7 +118,6 @@ public class MainUIController : MonoBehaviour
 
     public void LoadMainMenu()
     {
-        // Score nicht speichern und direkt zur Hauptmenüszene wechseln
         SceneManager.LoadScene("MenuScene", LoadSceneMode.Single);
     }
 }

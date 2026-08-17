@@ -14,23 +14,17 @@ public class Spawn2DManager : MonoBehaviour
     void Start()
     {
         
-        // Feste UI-Positionen für Gegner im 2D Fight
         spawnPoints.Add(new Vector3(4, 3, 0));
         spawnPoints.Add(new Vector3(4, -1, 0));
         spawnPoints.Add(new Vector3(2, 4.5f, 0));
         spawnPoints.Add(new Vector3(2, -2.5f, 0));
         spawnPoints.Add(new Vector3(4, 1, 0));
 
-        Debug.Log("Spawn2DManager initialized.");
         IsInitialized = true;
     }
 
-    // -------------------------------------------------
-    // Gegner spawnen (UI NICHT hier bauen)
-    // -------------------------------------------------
     public void SpawnEnemy(List<Enemy> enemies)
     {
-        // reset UI index + lösche alte UI
         BattleUIController.Instance.ResetEnemyUIIndex();
 
         for (int i = 0; i < enemies.Count && i < spawnPoints.Count; i++)
@@ -48,9 +42,6 @@ public class Spawn2DManager : MonoBehaviour
     }
 
 
-    // -------------------------------------------------
-    // Prefab lookup
-    // -------------------------------------------------
     private GameObject GetEnemyPrefab(string name)
     {
         switch (name)
@@ -66,29 +57,19 @@ public class Spawn2DManager : MonoBehaviour
         }
     }
 
-    // -------------------------------------------------
-    // Gegner sterben → Visual enfernen + UI entfernen
-    // -------------------------------------------------
     public void EnemieDied(GameObject enemyVisual)
     {
-        Debug.Log("EnemieDied() called for: " + enemyVisual.name);
-
         EnemyVisualPair pair = activeEnemies.Find(p => p.visual == enemyVisual);
 
         if (pair != null)
         {
-            Debug.Log("EnemyVisualPair found. Deleting visual and UI...");
-
-            // Visual zerstören
             pair.DestroyVisual();
 
-            // UI zerstören, falls vorhanden
             if (pair.uiObject != null)
             {
                 BattleUIController.Instance.RemoveEnemyUI(pair.uiObject);
             }
 
-            // Aus Liste entfernen
             activeEnemies.Remove(pair);
         }
         else

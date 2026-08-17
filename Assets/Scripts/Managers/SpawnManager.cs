@@ -62,7 +62,6 @@ public class SpawnManager : MonoBehaviour
 
     public float GetCurrentSpawnInterval() => currentSpawnInterval;
 
-    // ============= EXISTIERENDE FUNKTIONEN (unverändert) =============
     private void SpawnEnemy()
     {
         GameController gc = GameController.Instance;

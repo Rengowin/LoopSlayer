@@ -53,10 +53,6 @@ public class Enemy : MonoBehaviour
         get => scoreOneKill; set => scoreOneKill = value;
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-    }
 
     public void Init(EnemySpawnData spawnData, int anzLoops = 0)
     {
@@ -65,18 +61,11 @@ public class Enemy : MonoBehaviour
         hp = (float)(data.BaseHealth() * Math.Pow(data.ScalePerLoop, anzLoops));
         dmg = (float)(data.BaseDamage() * Math.Pow(data.ScalePerLoop, anzLoops));
         aktSpeed = data.BaseAktSpeed();
-        scoreOneKill = data.ScoreOneKill() + (int)(25 * anzLoops); //TODO: vlt zu starkes score scaling wenn fertig ist anschauen :D
+        scoreOneKill = data.ScoreOneKill() + (int)(25 * anzLoops);
         dropChance = data.BaseDropChance();
         currentActionTimer = aktSpeed;
         dropAmount = data.UpgradePointsOnKill();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
 
     public void UpdateActionTimer(float deltaTime)
     {
@@ -85,7 +74,6 @@ public class Enemy : MonoBehaviour
 
     public bool IsActionReady()
     {
-        Debug.Log("Es kann angreifen");
         return currentActionTimer <= 0;
     }
     public void ResetActionTimer()
@@ -95,7 +83,6 @@ public class Enemy : MonoBehaviour
 
     void Die()
     {
-        // Drops
         if (UnityEngine.Random.value < DropChance)
         {
             var upgradeController = FindObjectOfType<UpgradeController>();
@@ -105,13 +92,10 @@ public class Enemy : MonoBehaviour
             }
         }
 
-        // Score hinzufügen
         GameController.Instance.AddScore(scoreOneKill);
 
-        // --- Visual + UI korrekt entfernen ---
         if (BattelControler.Instance.Spawn2DManager != null)
         {
-            // Hole das gesamte Pair
             EnemyVisualPair pair = BattelControler.Instance.Spawn2DManager.GetPairForEnemy(this);
 
             if (pair != null)
@@ -128,10 +112,8 @@ public class Enemy : MonoBehaviour
             Debug.LogError("Spawn2DManager is null in Enemy.Die()");
         }
 
-        // Gegner aus Battle-Liste entfernen
         BattelControler.Instance.Enemys.Remove(this);
 
-        // Enemy Script GameObject löschen
         Destroy(gameObject);
     }
 

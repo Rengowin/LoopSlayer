@@ -4,8 +4,10 @@ using UnityEngine.UI;
 
 public class MainMenuButtons : MonoBehaviour
 {
-    [SerializeField] Button playButton;
-    [SerializeField] Button quitButton;
+    [SerializeField]
+    Button playButton;
+    [SerializeField]
+    Button quitButton;
 
     void Start()
     {
@@ -16,7 +18,6 @@ public class MainMenuButtons : MonoBehaviour
 
         quitButton.onClick.AddListener(() =>
         {
-            Debug.Log("Quit Game");
             Application.Quit();
         });
     }

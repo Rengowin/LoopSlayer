@@ -3,8 +3,10 @@ using TMPro;
 
 public class HighscoreMenuUI : MonoBehaviour
 {
-    [SerializeField] TMP_Text scoreText;
-    [SerializeField] int maxEntries; // Maximale Anzahl der angezeigten Highscores
+    [SerializeField]
+    TMP_Text scoreText;
+    [SerializeField]
+    int maxEntries;
     bool initialized = false;
 
     private void OnEnable()
@@ -15,7 +17,6 @@ public class HighscoreMenuUI : MonoBehaviour
 
     private void Update()
     {
-        // Solange kein HighscoreManager da ist → erneut versuchen
         if (!initialized)
             UpdateHighscoreList();
     }
@@ -27,7 +28,7 @@ public class HighscoreMenuUI : MonoBehaviour
         if (manager == null)
         {
             scoreText.text = "Loading...";
-            return; // noch nicht fertig → Update versucht später nochmal
+            return;
         }
 
         var scores = manager.Scores;
@@ -35,18 +36,17 @@ public class HighscoreMenuUI : MonoBehaviour
         if (scores == null || scores.Count == 0)
         {
             scoreText.text = "No scores yet!";
-            initialized = true; // UI fertig
+            initialized = true;
             return;
         }
 
         scoreText.text = "";
 
-        // Begrenze die Anzahl der angezeigten Highscores auf maxEntries
         for (int i = 0; i < Mathf.Min(scores.Count, maxEntries); i++)
         {
             scoreText.text += $"{i + 1}. {scores[i]}\n";
         }
 
-        initialized = true; // ab jetzt keine Updates mehr nötig
+        initialized = true;
     }
 }

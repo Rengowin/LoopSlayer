@@ -9,15 +9,20 @@ public class UpgradeManager : MonoBehaviour
 
     public static UpgradeManager Instance;
     [Header("Upgrade Pool")]
-    [SerializeField] List<BuffClass> PossibleUpgrades = new List<BuffClass>();
+    [SerializeField]
+    List<BuffClass> PossibleUpgrades = new List<BuffClass>();
 
     [Header("Max Upgrade Counts")]
-    [SerializeField] int maxATKSpeedUpgrades;
-    [SerializeField] int maxATKCountUpgrades;
+    [SerializeField]
+    int maxATKSpeedUpgrades;
+    [SerializeField]
+    int maxATKCountUpgrades;
 
     [Header("Enemy/Spawn Caps (Inspector gesteuert)")]
-    [SerializeField] float maxEnemyScaleReduction;
-    [SerializeField] float maxSpawnIntervalReduction;
+    [SerializeField]
+    float maxEnemyScaleReduction;
+    [SerializeField]
+    float maxSpawnIntervalReduction;
 
     [Header("UI References")]
     [SerializeField]
@@ -33,7 +38,6 @@ public class UpgradeManager : MonoBehaviour
 
     List<UpgradeButtonScript> upgradeButtons = new List<UpgradeButtonScript>();
 
-    // ===== BUFF LISTEN =====
     List<float> HPBuffAddition = new List<float>();
     List<float> HPBuffMultiy = new List<float>();
 
@@ -48,19 +52,15 @@ public class UpgradeManager : MonoBehaviour
     List<float> ATKSpeedAddition = new List<float>();
     List<float> ATKCountAddition = new List<float>();
 
-    // ===== SPAWN CHANCE =====
     List<float> SpawnChanceReductionPrefab0 = new List<float>();
     List<float> SpawnChanceAdditionPrefab1 = new List<float>();
     List<float> SpawnChanceAdditionPrefab2 = new List<float>();
     List<float> SpawnChanceAdditionPrefab3 = new List<float>();
 
-    // ===== SPAWN INTERVAL =====
     List<float> SpawnIntervalReduction = new List<float>();
 
-    // ===== ENEMY SCALE (nur Reduce!) =====
     List<float> EnemyScaleReduction = new List<float>();
 
-    // ===== TOTAL =====
     float totalHPBuff = 0;
     float totalDMGBuff = 0;
     float totalHealAmountBuff = 0;
@@ -81,20 +81,14 @@ public class UpgradeManager : MonoBehaviour
         }
     }
 
-    public void Update()
-    { 
-    }
-
     public void createBuffButtons(BuffClass buffInfo)
     {
-        Debug.Log($"Erstelle Button f�r Buff: {buffInfo.BuffName}");
         GameObject obj = Instantiate(upgradeButtonPrefab);
         obj.transform.SetParent(upgradeButtonContainer.transform, false);
 
         var script = obj.GetComponent<UpgradeButtonScript>();
         if (script != null)
         {
-            Debug.Log("UpgradeButtonScript gefunden. Initialisiere Button.");
             script.Init(buffInfo, this, upgradeController);
         }
         else
@@ -103,16 +97,11 @@ public class UpgradeManager : MonoBehaviour
         }
     }
 
-    // =======================================================================
-    //  ADD TO LIST (BUFF NAME MATCHING)
-    // =======================================================================
     public void addToListX(string ListName, float buffAmount)
     {
-        Debug.Log($"addToListX → {ListName} | {buffAmount}");
 
         switch (ListName)
         {
-            // ===== PLAYER =====
             case "HP Addition":
                 HPBuffAddition.Add(buffAmount);
                 break;
@@ -146,7 +135,6 @@ public class UpgradeManager : MonoBehaviour
                 break;
 
 
-            // ===== SPAWN CHANCE =====
             case "SpawnChance Reduction Prefab0 Addition":
                 SpawnChanceReductionPrefab0.Add(buffAmount);
                 break;
@@ -164,35 +152,27 @@ public class UpgradeManager : MonoBehaviour
                 break;
 
 
-            // ===== SPAWN INTERVAL =====
             case "SpawnInterval Reduction Addition":
                 SpawnIntervalReduction.Add(buffAmount);
                 break;
 
 
-            // ===== ENEMY SCALE (nur Reduce) =====
             case "EnemyScaleReduce Addition":
                 EnemyScaleReduction.Add(buffAmount);
                 break;
 
 
-            // ===== ERROR =====
             default:
                 Debug.LogError($"Unknown buff list: {ListName}");
                 break;
         }
     }
 
-    // =======================================================================
-    //  APPLY BUFF
-    // =======================================================================
     public void applyBuff(BuffClass buff)
     {
-        // Buff String erweitern
         string key = buff.BuffName + (buff.BuffAddtive ? " Addition" : " Multiy");
         addToListX(key, buff.BuffAmount);
 
-        // ----- PLAYER BUFFS -----
         totalHPBuff = CalculateTotalBuff(HPBuffAddition, HPBuffMultiy);
         totalDMGBuff = CalculateTotalBuff(DMGBuffAddition, DMGBuffMultiy);
         totalHealAmountBuff = CalculateTotalBuff(HealAmountAddition, HealAmountMultiy);
@@ -212,19 +192,16 @@ public class UpgradeManager : MonoBehaviour
             );
         }
 
-        // ===== SPAWN INTERVAL =====
         float spawnIntervalReduction = SumList(SpawnIntervalReduction);
         spawnIntervalReduction = Mathf.Min(spawnIntervalReduction, maxSpawnIntervalReduction);
 
         GameController.Instance.SpawnManager.ApplySpawnIntervalReduction(spawnIntervalReduction);
 
-        // ===== ENEMY SCALE (REDUCE) =====
         float scaleReduction = SumList(EnemyScaleReduction);
         scaleReduction = Mathf.Min(scaleReduction, maxEnemyScaleReduction);
 
         GameController.Instance.SpawnManager.ApplyEnemyScaleReduction(scaleReduction);
 
-        // ===== SPAWN CHANCE =====
         float t0 = SumList(SpawnChanceReductionPrefab0);
         float t1 = SumList(SpawnChanceAdditionPrefab1);
         float t2 = SumList(SpawnChanceAdditionPrefab2);
@@ -232,10 +209,6 @@ public class UpgradeManager : MonoBehaviour
 
         GameController.Instance.SpawnManager.ApplySpawnChanceChanges(t0, t1, t2, t3);
     }
-
-    // =======================================================================
-    //  HELPERS
-    // =======================================================================
 
     float CalculateTotalBuff(List<float> addList, List<float> multiList)
     {

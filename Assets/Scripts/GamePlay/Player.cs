@@ -13,7 +13,6 @@ public class Player : MonoBehaviour
 
     float currentActionTimer;
 
-    // === Base Werte für Buff-System ===
     float baseMaxHP;
     float baseDMG;
     float baseSpeed;
@@ -21,7 +20,8 @@ public class Player : MonoBehaviour
     int baseATKCount;
     float baseHealAmount;
 
-    // === Properties (UNVERÄNDERT) ===
+    bool allreadyDead = false;
+
     public float currentHP
     {
         get => hp;
@@ -30,11 +30,17 @@ public class Player : MonoBehaviour
             hp = value;
             GameController.Instance.MainUIController.PlayerHP = hp;
 
-            if (hp <= 0)
+            if (hp <= 0 && !allreadyDead)
             {
-                GameController.Instance.GameOver();
+                allreadyDead = true;
                 hp = 0;
-                Debug.Log("Player is dead.");
+
+                GameController.Instance.GameOver();
+            }
+
+            if(hp <= 0)
+            {
+                hp = 0;
             }
         }
     }
@@ -85,7 +91,6 @@ public class Player : MonoBehaviour
     {
         currentActionTimer = aktSpeed;
 
-        // ==== Base Werte speichern ====
         baseMaxHP = maxHP;
         baseDMG = dmg;
         baseSpeed = speed;
@@ -109,9 +114,6 @@ public class Player : MonoBehaviour
         currentActionTimer = aktSpeed;
     }
 
-    // ============================================================
-    //                BUFF-UPDATE (keine Doppel-Additionen)
-    // ============================================================
     public void ApplyBuffs(
         float hpBuff,
         float dmgBuff,
@@ -120,28 +122,20 @@ public class Player : MonoBehaviour
         float movementBuff,
         int atkCountBuff)
     {
-        // HP
         maxHP = (int)(baseMaxHP + hpBuff);
 
         if (currentHP > maxHP)
             currentHP = maxHP;
 
-        // Damage
         dmg = baseDMG + dmgBuff;
 
-        // Movement
         speed = baseSpeed + movementBuff;
 
-        // ATK Speed (Buff = schneller → aktSpeed wird kleiner)
         aktSpeed = Mathf.Max(0.1f, baseATKSpeed - atkSpeedBuff);
 
-        // ATK Count
         atkCount = baseATKCount + atkCountBuff;
 
-        // Heal amount
         healAmount = baseHealAmount + healBuff;
-
-        Debug.Log($"[Player Buffs] HP:{maxHP} DMG:{dmg} SPD:{speed} ATKSPD:{aktSpeed} COUNT:{atkCount}");
     }
 
     public void Heal()

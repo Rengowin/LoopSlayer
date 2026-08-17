@@ -1,5 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class BattelControler : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class BattelControler : MonoBehaviour
     float tempMovementSpeed;
     bool aktivHeal;
 
-    private bool fightSceneLoaded = false; // verhindert doppelte Loads
+    private bool fightSceneLoaded = false;
 
     public Player Player => player;
     public BattelManger BattelManger => battelManger;
@@ -36,9 +37,6 @@ public class BattelControler : MonoBehaviour
         battelManger = FindObjectOfType<BattelManger>();
     }
 
-    // ------------------------------------------------------
-    // KAMPF STARTEN
-    // ------------------------------------------------------
     public void StartBattle()
     {
         if (fightSceneLoaded)
@@ -47,31 +45,22 @@ public class BattelControler : MonoBehaviour
             return;
         }
 
-        // Player einfrieren
         tempMovementSpeed = player.Speed;
 
-        //HealSpeed should be false that the player can't heal during battle
         player.Speed = 0;
 
-        // UI auf Kampfmodus
         UIVisibilityManager.Instance.ShowFightUI();
 
-        // Spawn in der normalen Welt stoppen
         GameController.Instance.spawnActiv = false;
 
-        // Gegnerliste an BattleManager übergeben
         battelManger.Enemies = enemys;
         battelManger.Player = player;
         battelManger.BattelActive = true;
 
-        // FightScene laden
         SceneToggleManager.Instance.LoadFightScene();
         fightSceneLoaded = true;
     }
 
-    // ------------------------------------------------------
-    // NACH SZENE-LADEN → Gegner + Player UI spawnen
-    // ------------------------------------------------------
     public void spawnEnemysAfterSecenLoad()
     {
         spawn2DManager = FindObjectOfType<Spawn2DManager>();
@@ -88,52 +77,44 @@ public class BattelControler : MonoBehaviour
             return;
         }
 
-        // Gegner spawnen
         spawn2DManager.SpawnEnemy(enemys);
 
-        // Player UI erzeugen
         BattleUIController.Instance.CreatePlayerUI(player);
     }
 
-    // ------------------------------------------------------
-    // KAMPF BEENDEN
-    // ------------------------------------------------------
     public void EndBattle()
     {
-        // Player zurücksetzen
-        player.Speed = tempMovementSpeed;
+        player.Speed = 0;
 
-        // Spawning wieder aktivieren
-        GameController.Instance.spawnActiv = true;
-
-        // UI auf normalen Modus
         UIVisibilityManager.Instance.ShowNormalUI();
 
-        // UI entfernen
         if (BattleUIController.Instance != null)
             BattleUIController.Instance.RemovePlayerUI();
 
         enemys?.Clear();
 
-        // FightScene entladen
         if (fightSceneLoaded)
         {
             SceneToggleManager.Instance.UnloadFightScene();
             fightSceneLoaded = false;
         }
+
+        StartCoroutine(ResumeGameAfterDelay(1f));
     }
 
-    // ------------------------------------------------------
-    // Gegner hinzufügen
-    // ------------------------------------------------------
+    private IEnumerator ResumeGameAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        player.Speed = tempMovementSpeed;
+        GameController.Instance.spawnActiv = true;
+    }
+
     public void AddEnemy(List<Enemy> newEnemys)
     {
         enemys.AddRange(newEnemys);
     }
 
-    // ------------------------------------------------------
-    // Gegner entfernen (durch Tod)
-    // ------------------------------------------------------
     public void RemoveEnemy(Enemy enemy)
     {
         enemys.Remove(enemy);
@@ -145,8 +126,5 @@ public class BattelControler : MonoBehaviour
             if (pair != null)
                 spawn2DManager.EnemieDied(pair.visual);
         }
-
-        if (enemys.Count == 0)
-            EndBattle();
     }
 }

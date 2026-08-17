@@ -6,16 +6,6 @@ public class SceneToggleManager : MonoBehaviour
 {
     public static SceneToggleManager Instance { get; private set; }
 
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-
-    }
-
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -63,14 +53,12 @@ public class SceneToggleManager : MonoBehaviour
         if (scene.name == "Fight")
         {
             SceneManager.sceneLoaded -= OnFightSceneLoaded;
-            // Nicht direkt aufrufen — Coroutine wartet kurz bis Spawn2DManager da ist
             StartCoroutine(WaitForSpawnManagerAndTriggerSpawn());
         }
     }
 
     private System.Collections.IEnumerator WaitForSpawnManagerAndTriggerSpawn()
     {
-        // warte mindestens einen Frame, damit Awake/Start der Szene laufen kann
         yield return null;
 
         float timeout = 2f;
@@ -90,7 +78,6 @@ public class SceneToggleManager : MonoBehaviour
             yield break;
         }
 
-        // Jetzt sicher aufrufen
         if (BattelControler.Instance != null)
             BattelControler.Instance.spawnEnemysAfterSecenLoad();
         else
