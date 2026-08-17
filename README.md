@@ -12,26 +12,39 @@ A high-score game inspired by Loop Hero, developed as a university project for t
 
 ## Features
 
-- scaring enemies with every loop
+- scaring enemies
+- 3 types of enemies
 - upgrades
-- score board (that stays even after the games is closed)
-- C# data classes for enemies that the enemy types are based on
-- creative use of the slider (at least what my profs said to me)
-- additive scene loading (from game board to fight)
+- persistence high score
+- automatic battle
+- enemy spawning
 
 ## Technical Highlights
 
+- additive scene loading for fights
+- C# data classes for enemy
 - spawn manager
-- high score
-- 3 enemy typs
-- upgrades
+- persistence high score
+- upgrade system with additive and multiplication stats
 
 ## Controls
 
 the game play it self you controls what upgrades to buy upgrades
 
-## Learning's
+## Learning Outcomes
 
+This was my first independently developed Unity project and my first
+larger project using C#, after previously working mainly with Java.
+
+During development, I gained experience with:
+
+- transferring object-oriented programming concepts from Java to C#
+- structuring a larger Unity project using multiple scripts and managers
+- separating game data from behaviour using data classes
+- using Singleton patterns for shared game systems
+- additive scene loading and sharing game state between scenes
+- working with Prefabs and the Unity Inspector
+- building UI with Unity's Canvas system
 
 ## Project History
 
