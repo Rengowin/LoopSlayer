@@ -10,6 +10,8 @@ A high-score game inspired by Loop Hero, developed as a university project for t
 
 ## Gameplay
 
+[here screne shots?]
+
 ## Features
 
 - scaring enemies
@@ -31,20 +33,13 @@ A high-score game inspired by Loop Hero, developed as a university project for t
 
 the game play it self you controls what upgrades to buy upgrades
 
-## Learning Outcomes
+## What I learned
 
-This was my first independently developed Unity project and my first
-larger project using C#, after previously working mainly with Java.
+- working with addictive sences
+- Data classes
+    - for like enemies
+- that the accesmodifer is always private if you don’t say like public or so
 
-During development, I gained experience with:
-
-- transferring object-oriented programming concepts from Java to C#
-- structuring a larger Unity project using multiple scripts and managers
-- separating game data from behaviour using data classes
-- using Singleton patterns for shared game systems
-- additive scene loading and sharing game state between scenes
-- working with Prefabs and the Unity Inspector
-- building UI with Unity's Canvas system
 
 ## Project History
 
