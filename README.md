@@ -1,7 +1,5 @@
 # LoopSlayer
 
-This was my first unity experience.
-
 A high-score game inspired by Loop Hero, developed as a university project for the Game Engines course at the HTW Berlin.
 
 ## About the Project
