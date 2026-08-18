@@ -2,6 +2,10 @@
 
 A high-score game inspired by Loop Hero, developed as a university project for the Game Engines course at HTW Berlin.
 
+
+### **Gane Board**
+<img width="1919" height="1079" alt="GameBoard" src="https://github.com/user-attachments/assets/8cfffd33-0ea2-4ce4-b63e-24f5963baf92" />
+
 ## About the Project
 
 LoopSlayer is a top-down, auto-battler game where you don't control the character directly—instead, you strategically purchase upgrades to maximize your score. The player automatically runs through an endless loop, engaging enemies that spawn periodically. The challenge is to survive as long as possible and set the highest score!
@@ -16,6 +20,12 @@ Upgrade points can be used to improve player stats such as health, damage and at
 - Up to 4 enemies can fight you simultaneously
 - Enemies spawn every few seconds (this interval can be reduced with upgrades)
 - Battles occur automatically when you enter the collide with enemies
+
+### **Shop**
+<img width="1919" height="1079" alt="Screenshot 2026-08-18 191502" src="https://github.com/user-attachments/assets/cd2962d0-b091-441c-8bef-a961301737fc" />
+
+### **Fight**
+<img width="1919" height="1077" alt="FightScene" src="https://github.com/user-attachments/assets/cb27c30f-bba7-4a8e-a81a-721883d0787b" />
 
 ## Features
 
@@ -86,17 +96,6 @@ In **Summer 2026**, the project was revisited to:
   - Ultra-wide resolutions (3440×1440) are not fully supported
 - The "Back to Main Menu" button placement could be improved
 - Attack speed stat might be more accurately named "Attack Cooldown"
-
-## Screenshots
-
-### **Gane Board**
-<img width="1919" height="1079" alt="GameBoard" src="https://github.com/user-attachments/assets/8cfffd33-0ea2-4ce4-b63e-24f5963baf92" />
-
-### **Shop**
-<img width="1919" height="1079" alt="Screenshot 2026-08-18 191502" src="https://github.com/user-attachments/assets/cd2962d0-b091-441c-8bef-a961301737fc" />
-
-### **Fight**
-<img width="1919" height="1077" alt="FightScene" src="https://github.com/user-attachments/assets/cb27c30f-bba7-4a8e-a81a-721883d0787b" />
 
 
 ---
