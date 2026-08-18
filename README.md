@@ -2,7 +2,7 @@
 
 A high-score game inspired by Loop Hero, developed as a university project for the Game Engines course at HTW Berlin.
 
-### **Gane Board**
+### **Game Board**
 <img width="1919" height="1079" alt="GameBoard" src="https://github.com/user-attachments/assets/8cfffd33-0ea2-4ce4-b63e-24f5963baf92" />
 
 ## About the Project
@@ -55,7 +55,7 @@ The character movement and combat are fully automatic
 ## Technical Highlights
 
 - **Additive Scene Loading**: The fight scene is loaded additively while keeping the main game board loaded
-- **C# Data Classes**: For enemy and upgrade data
+- **C# Data Classes**: Used to store enemy and upgrade data
 - **Spawn Manager**: Every 10 seconds, an enemy has a chance to spawn on a path tile
 - **Persistence System**: Local high score storage
 - **Upgrade System**: Flexible stat modifications using both additive and multiplicative operations
