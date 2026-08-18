@@ -15,7 +15,7 @@ Upgrade points can be used to improve player stats such as health, damage and at
 **Battle System:**
 - Up to 4 enemies can fight you simultaneously
 - Enemies spawn every few seconds (this interval can be reduced with upgrades)
-- Battles occur automatically when you collide with enemies
+- Battles occur automatically when you enter the collide with enemies
 
 ## Features
 
@@ -23,16 +23,16 @@ Upgrade points can be used to improve player stats such as health, damage and at
 - **Three Enemy Types**: Each with different stats
 - **Automatic Combat**: Turn-based enemy encounters without manual input
 - **High Score Persistence**: Your best scores are saved locally
-- **Stat Progression**: Combine additive and multiplicative upgrade effects using additive and multiplicative stat modifications
+- **Stat Progression**: Using additive and multiplicative stat modifications to buff yourself
 - **Endless Gameplay**: Keep playing to beat your previous high score
 
 ## Enemies
 
-| Enemy Type | Health | Damage | ATK cooldown | Score |
+| Enemy Type | Health | Damage | Attack Cooldown | Score |
 |------------|--------|--------------|--------|-------|
 | **Slime** | 20 | 2 | 5 | 100 |
 | **Bat** | 15 | 2 | 2 | 175 |
-| **Rock** | 60 | 5 |7 | 250 |
+| **Rock** | 60 | 5 | 7 | 250 |
 
 Enemy stats are multiplied by 1.15 each loop.
 
@@ -45,9 +45,9 @@ The character movement and combat are fully automatic.
 
 ## Technical Highlights
 
-- **Additive Scene Loading**: Seamless fight transitions without reloading the main scene
-- **C# Data Classes**: Well-structured enemy and upgrade systems
-- **Spawn Manager**: every 10s an enemy can spawn on a path tile
+- **Additive Scene Loading**: The fight scene is loaded additively while keeping the main game board loaded.
+- **C# Data Classes**: For enemy and upgrade data
+- **Spawn Manager**: Every 10 seconds, an enemy has a chance to spawn on a path tile.
 - **Persistence System**: Local high score storage
 - **Upgrade System**: Flexible stat modifications using both additive and multiplicative operations
 
@@ -60,8 +60,7 @@ The character movement and combat are fully automatic.
 
 - Working with additive scene loading
 - Designing and implementing data classes for complex game objects (enemies, upgrades)
-- Working with C# access modifiers and their default behavior (that default is private is without writing is is a blessing)
-- Building scalable upgrade and stat systems
+- Working with C# access modifiers and their default behavior (not having to explicitly write private everywhere was a nice discovery).
 
 ## Getting Started
 
@@ -73,7 +72,7 @@ The character movement and combat are fully automatic.
 
 ## Project History
 
-The original project was developed during the Game Engines course from **October, 2025** to **November 16, 2025**. 
+The original project was developed during the Game Engines course from **October 2025** to **November 16, 2025**. 
 
 In **Summer 2026**, the project was revisited to:
 - Improve UI scaling across different resolutions
@@ -90,8 +89,8 @@ In **Summer 2026**, the project was revisited to:
 
 ## Screenshots
 
-### **Ganeboard**
-<img width="1678" height="1046" alt="GameBoard" src="https://github.com/user-attachments/assets/bcec73a0-f41c-4095-8b5f-3b652b031e95" />
+### **Gane Board**
+<img width="1919" height="1079" alt="GameBoard" src="https://github.com/user-attachments/assets/8cfffd33-0ea2-4ce4-b63e-24f5963baf92" />
 
 ### **Shop**
 <img width="1919" height="1079" alt="Screenshot 2026-08-18 191502" src="https://github.com/user-attachments/assets/cd2962d0-b091-441c-8bef-a961301737fc" />
