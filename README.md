@@ -26,17 +26,18 @@ Your character moves automatically through an endless loop. As enemies spawn, th
 
 ## Enemies
 
-| Enemy Type | Health | Attack Speed | Damage | Notes |
+| Enemy Type | Health | Damage | ATK cooldown | Score |
 |------------|--------|--------------|--------|-------|
-| **Slime** | Low | Slow | Low | Weakest enemy, good for early game |
-| **Bat** | Very Low | Fast | Low-Medium | Fragile but quick attacks |
-| **Rock** | High | Slow | Medium-High | Tanky opponent, deals significant damage |
+| **Slime** | 20 | 2 | 5 | 100 |
+| **Bat** | 15 | 2 | 2 | 175 |
+| **Rock** | 60 | 5 |7 | 250 |
+
+every enemy has a base scaling of 0.15 per loop
 
 ## Controls
 
 All controls are UI-based:
 - **Mouse** to purchase upgrades
-- **Spacebar/Button** to navigate menus
 
 The character movement and combat are fully automatic.
 
@@ -51,8 +52,7 @@ The character movement and combat are fully automatic.
 ## Technical Stack
 
 - **Engine**: Unity
-- **Language**: C# (67.6%)
-- **Shaders**: ShaderLab (26.9%) + HLSL (5.5%)
+- **Language**: C# 
 
 ## What I Learned
 
@@ -71,7 +71,7 @@ The character movement and combat are fully automatic.
 
 ## Project History
 
-The original project was developed during the Game Engines course from **September 20, 2025** to **November 16, 2025**. 
+The original project was developed during the Game Engines course from **October 20, 2025** to **November 16, 2025**. 
 
 In **Summer 2026**, the project was revisited to:
 - Improve UI scaling across different resolutions
@@ -94,18 +94,10 @@ In **Summer 2026**, the project was revisited to:
 
 [Add screenshot of the pause/upgrade menu]
 
-## Future Improvements
-
-- [ ] Improve UI responsiveness for all aspect ratios
-- [ ] Fix player spawn position
-- [ ] Optimize attack stat naming/clarity
-- [ ] Add visual feedback for upgrades
-- [ ] Expand enemy variety and behaviors
-
 ---
 
-**Developed by**: [Your Name]  
+**Developed by**: [Winde, Benjamin \ RengoWin]  
 **Course**: Game Engines @ HTW Berlin  
-**Year**: 2025-2026
+**Year**: Developed 2025, revisited 2026
 
-Viel Spaß mit dem Spiel! 🎮
+Have fun playing 🎮
