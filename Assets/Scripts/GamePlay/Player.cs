@@ -115,19 +115,22 @@ public class Player : MonoBehaviour
     }
 
     public void ApplyBuffs(
-        float hpBuff,
-        float dmgBuff,
+        float hpAddition,
+        float hpMultiplier,
+        float dmgAddition,
+        float dmgMultiplier,
         float atkSpeedBuff,
-        float healBuff,
+        float healAddition,
+        float healMultiplier,
         float movementBuff,
         int atkCountBuff)
     {
-        maxHP = (int)(baseMaxHP + hpBuff);
+        maxHP = (int)((baseMaxHP + hpAddition) * hpMultiplier);
 
         if (currentHP > maxHP)
             currentHP = maxHP;
 
-        dmg = baseDMG + dmgBuff;
+        dmg = (baseDMG + dmgAddition) * dmgMultiplier;
 
         speed = baseSpeed + movementBuff;
 
@@ -135,7 +138,7 @@ public class Player : MonoBehaviour
 
         atkCount = baseATKCount + atkCountBuff;
 
-        healAmount = baseHealAmount + healBuff;
+        healAmount = (baseHealAmount + healAddition) * healMultiplier;
     }
 
     public void Heal()

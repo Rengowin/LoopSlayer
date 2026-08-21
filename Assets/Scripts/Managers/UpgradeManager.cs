@@ -161,6 +161,18 @@ public class UpgradeManager : MonoBehaviour
                 EnemyScaleReduction.Add(buffAmount);
                 break;
 
+            case "HP Multiy":
+                HPBuffMultiy.Add(buffAmount);
+                break;
+
+            case "DMG Multiy":
+                DMGBuffMultiy.Add(buffAmount);
+                break;
+
+            case "HealAmount Multiy":
+                HealAmountMultiy.Add(buffAmount);
+                break;
+
 
             default:
                 Debug.LogError($"Unknown buff list: {ListName}");
@@ -173,9 +185,15 @@ public class UpgradeManager : MonoBehaviour
         string key = buff.BuffName + (buff.BuffAddtive ? " Addition" : " Multiy");
         addToListX(key, buff.BuffAmount);
 
-        totalHPBuff = CalculateTotalBuff(HPBuffAddition, HPBuffMultiy);
-        totalDMGBuff = CalculateTotalBuff(DMGBuffAddition, DMGBuffMultiy);
-        totalHealAmountBuff = CalculateTotalBuff(HealAmountAddition, HealAmountMultiy);
+        float totalHPAddition = SumList(HPBuffAddition);
+        float totalHPMultiplier = CalculateMultiplier(HPBuffMultiy);
+        
+        float totalDMGAddition = SumList(DMGBuffAddition);
+        float totalDMGMultiplier = CalculateMultiplier(DMGBuffMultiy);
+        
+        float totalHealAmountAddition = SumList(HealAmountAddition);
+        float totalHealAmountMultiplier = CalculateMultiplier(HealAmountMultiy);
+        
         totalMovementSpeedBuff = CalculateTotalBuff(MovementSpeedAddition, null);
         totalATKSpeedBuff = CalculateTotalBuff(ATKSpeedAddition, null);
         totalATKCountBuff = CalculateTotalBuff(ATKCountAddition, null);
@@ -183,10 +201,13 @@ public class UpgradeManager : MonoBehaviour
         if (BattelControler.Instance?.Player != null)
         {
             BattelControler.Instance.Player.ApplyBuffs(
-                totalHPBuff,
-                totalDMGBuff,
+                totalHPAddition,
+                totalHPMultiplier,
+                totalDMGAddition,
+                totalDMGMultiplier,
                 totalATKSpeedBuff,
-                totalHealAmountBuff,
+                totalHealAmountAddition,
+                totalHealAmountMultiplier,
                 totalMovementSpeedBuff,
                 (int)totalATKCountBuff
             );
@@ -217,10 +238,22 @@ public class UpgradeManager : MonoBehaviour
 
         if (multiList != null)
         {
-            foreach (var m in multiList) multi *= (1f + m);
+            foreach (var m in multiList) multi *= m;
         }
 
         return add * multi;
+    }
+
+    float CalculateMultiplier(List<float> multiList)
+    {
+        float multi = 1f;
+
+        if (multiList != null)
+        {
+            foreach (var m in multiList) multi *= m;
+        }
+
+        return multi;
     }
 
     float SumList(List<float> list)

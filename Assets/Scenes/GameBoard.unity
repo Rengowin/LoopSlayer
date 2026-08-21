@@ -14010,7 +14010,7 @@ MonoBehaviour:
     baseDamage: 2
     baseAktSpeed: 5
     scalePerLoop: 1.15
-    baseDropChance: 1
+    baseDropChance: 0.5
     upgradePointsOnKill: 1
     scoreOneKill: 100
   - EnemyPrefab: {fileID: 3104077657696033756, guid: 12978a12e6737dd4193e985d8bbcb77a, type: 3}
@@ -14022,20 +14022,20 @@ MonoBehaviour:
     baseDamage: 2
     baseAktSpeed: 2
     scalePerLoop: 1.15
-    baseDropChance: 0.3
+    baseDropChance: 1
     upgradePointsOnKill: 1
     scoreOneKill: 175
   - EnemyPrefab: {fileID: 3770074106873277189, guid: 0bab0498a11725f42ab0db44c1c381af, type: 3}
     enemyName: Rock
     tier: 3
     spawnChance: 0.05
-    unlocked: 0
+    unlocked: 1
     baseHealth: 60
     baseDamage: 5
     baseAktSpeed: 7
     scalePerLoop: 1.15
-    baseDropChance: 0.6
-    upgradePointsOnKill: 15
+    baseDropChance: 1
+    upgradePointsOnKill: 3
     scoreOneKill: 250
   enemyContainer: {fileID: 574318938}
   baseSpawnInterval: 10
@@ -14498,14 +14498,14 @@ MonoBehaviour:
     addtive: 0
     upgradeCost: 1
   - buffName: HealAmount
-    buffAmount: 20
+    buffAmount: 10
     multiply: 0
     addtive: 1
     upgradeCost: 1
   - buffName: HealAmount
-    buffAmount: 20
-    multiply: 0
-    addtive: 1
+    buffAmount: 1.1
+    multiply: 1
+    addtive: 0
     upgradeCost: 1
   - buffName: MovementSpeed
     buffAmount: 0.5
