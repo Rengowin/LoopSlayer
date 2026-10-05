@@ -7,7 +7,7 @@ A high-score game inspired by Loop Hero, developed as a university project for t
 
 ## About the Project
 
-LoopSlayer is a top-down, auto-battler game where you don't control the character directly—instead, you strategically purchase upgrades to maximize your score. The player automatically runs through an endless loop, engaging enemies that spawn periodically. The challenge is to survive as long as possible and set the highest score!
+LoopSlayer is a top-down, auto-battler game where you don't control the character directly instead, you strategically purchase upgrades to maximize your score. The player automatically runs through an endless loop, engaging enemies that spawn periodically. The challenge is to survive as long as possible and set the highest score!
 
 ## Gameplay
 
